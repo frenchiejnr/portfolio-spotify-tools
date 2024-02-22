@@ -1,10 +1,25 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { AccessTokenButton } from './features/auth/components/AccessTokenButton'
+import storage from './utils/storage'
+import { getAccessToken } from './features/auth'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  useEffect(()=> {
+    const getToken = async  ()=> {
+      const args = new URLSearchParams(window.location.search);
+      const code = args.get("code");
+      if (code) {
+        const token = await getAccessToken(code);
+        storage.setAccessToken(token);
+      }
+    }
+    getToken();
+  }, [])
 
   return (
     <>
@@ -28,6 +43,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <AccessTokenButton />
     </>
   )
 }
