@@ -25,7 +25,7 @@ export const useNotificationsStore = create<NotificationsStore>((set) => ({
   dismissNotification: (id) =>
     set((state) => ({
       notifications: state.notifications.filter(
-        (notification) => notification.id !== id
+        (notification) => notification.id !== id,
       ),
     })),
 }));

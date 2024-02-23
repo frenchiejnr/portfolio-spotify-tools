@@ -18,7 +18,7 @@ const storage = {
     window.localStorage.removeItem(`code_verifier`);
   },
   getAccessToken: () => {
-    return JSON.parse(window.localStorage.getItem(`access_token`) as string);
+    return window.localStorage.getItem(`access_token`);
   },
   setAccessToken: (response: any) => {
     const { access_token, refresh_token, expires_in } = response;

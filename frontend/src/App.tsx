@@ -1,25 +1,29 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { AccessTokenButton } from './features/auth/components/AccessTokenButton'
-import storage from './utils/storage'
-import { getAccessToken } from './features/auth'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import { AccessTokenButton } from "./features/auth/components/AccessTokenButton";
+import storage from "./utils/storage";
+import { getAccessToken } from "./features/auth";
+import {
+  handleGetMe,
+  handleGetRecentlyPlayed,
+} from "./features/spotify-user-info";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
-  useEffect(()=> {
-    const getToken = async  ()=> {
+  useEffect(() => {
+    const getToken = async () => {
       const args = new URLSearchParams(window.location.search);
       const code = args.get("code");
       if (code) {
         const token = await getAccessToken(code);
         storage.setAccessToken(token);
       }
-    }
+    };
     getToken();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -44,8 +48,12 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
       <AccessTokenButton />
+      <button onClick={handleGetMe}>Get me</button>
+      <button type="button" onClick={handleGetRecentlyPlayed}>
+        Get recently played
+      </button>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

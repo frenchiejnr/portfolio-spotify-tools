@@ -1,4 +1,4 @@
-import { CLIENT_ID, REDIRECT_URI } from "@/config";
+import { CLIENT_ID, REDIRECT_URI, SCOPES } from "@/config";
 import storage from "@/utils/storage";
 import { generateCodeVerifier, generateCodeChallenge } from "../utils";
 
@@ -14,7 +14,7 @@ export const requestUserAuthorization = async () => {
   const params = {
     response_type: "code",
     client_id: CLIENT_ID,
-    scope: " ",
+    scope: SCOPES,
     code_challenge_method: "S256",
     code_challenge: codeChallenge,
     redirect_uri: REDIRECT_URI,
