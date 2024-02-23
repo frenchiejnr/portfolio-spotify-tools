@@ -4,10 +4,10 @@ import storage from "@/utils/storage";
 import { UsersRecentlyPlayedTracksResponse } from "spotify-api";
 
 export const handleGetMe = async () => {
-  console.log(storage.getAccessToken());
+  console.log(storage.getToken("spotify"));
   const userData = await spotify.get("/me", {
     headers: {
-      Authorization: `Bearer ${storage.getAccessToken()}`,
+      Authorization: `Bearer ${storage.getToken("spotify")}`,
     },
   });
   console.log(userData);
@@ -27,7 +27,7 @@ export const handleGetRecentlyPlayed = async (
   }
 
   const headers = {
-    Authorization: `Bearer ${storage.getAccessToken()}`,
+    Authorization: `Bearer ${storage.getToken("spotify")}`,
   };
 
   try {

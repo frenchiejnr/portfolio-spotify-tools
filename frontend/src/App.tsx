@@ -20,6 +20,7 @@ function App() {
       const code = args.get("code");
       if (code) {
         const token = await getAccessToken(code);
+        storage.setToken("spotify", `Bearer ${token.access_token}`);
         storage.setAccessToken(token);
       }
     };
