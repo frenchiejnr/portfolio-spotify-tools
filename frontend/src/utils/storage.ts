@@ -1,12 +1,14 @@
 const storage = {
-  getToken: () => {
-    return JSON.parse(window.localStorage.getItem(`token`) as string);
+  getToken: (service: string) => {
+    return JSON.parse(
+      window.localStorage.getItem(`${service}_token`) as string
+    );
   },
-  setToken: (token: string) => {
-    window.localStorage.setItem(`token`, JSON.stringify(token));
+  setToken: (service: string, token: string) => {
+    window.localStorage.setItem(`${service}_token`, JSON.stringify(token));
   },
-  clearToken: () => {
-    window.localStorage.removeItem(`token`);
+  clearToken: (service: string) => {
+    window.localStorage.removeItem(`${service}_token`);
   },
   getCodeVerifier: () => {
     return window.localStorage.getItem(`code_verifier`);

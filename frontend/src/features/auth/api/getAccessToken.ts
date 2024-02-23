@@ -1,4 +1,4 @@
-import { CLIENT_ID, REDIRECT_URI } from "@/config";
+import { SPOTIFY_CLIENT_ID, REDIRECT_URI } from "@/config";
 
 export async function getAccessToken(code: string) {
   const code_verifier = localStorage.getItem("code_verifier");
@@ -10,7 +10,7 @@ export async function getAccessToken(code: string) {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
-      client_id: CLIENT_ID,
+      client_id: SPOTIFY_CLIENT_ID,
       grant_type: "authorization_code",
       code: code,
       redirect_uri: REDIRECT_URI,

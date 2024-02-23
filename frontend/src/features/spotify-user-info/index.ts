@@ -14,9 +14,9 @@ export const handleGetMe = async () => {
 };
 
 export const handleGetRecentlyPlayed = async (
-  e: Event,
+  e: React.MouseEvent<HTMLButtonElement>,
   after?: string,
-  limit = 10,
+  limit = 10
 ) => {
   e.preventDefault();
   const url = `/me/player/recently-played`;
