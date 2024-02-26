@@ -26,14 +26,9 @@ export const handleGetRecentlyPlayed = async (
     params.after = after;
   }
 
-  const headers = {
-    Authorization: `Bearer ${storage.getToken("spotify")}`,
-  };
-
   try {
     const response: UsersRecentlyPlayedTracksResponse = await spotify.get(url, {
       params,
-      headers,
     });
 
     console.log(response);

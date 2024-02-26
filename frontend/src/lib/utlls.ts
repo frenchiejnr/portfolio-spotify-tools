@@ -5,8 +5,6 @@ export const authRequestInterceptor = (
   config: InternalAxiosRequestConfig,
   service: string
 ) => {
-  console.log(config);
-
   const token = storage.getToken(service);
   if (token) {
     config.headers.Authorization = `${token}`;

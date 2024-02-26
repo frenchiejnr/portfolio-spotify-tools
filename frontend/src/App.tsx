@@ -10,6 +10,7 @@ import {
   handleGetRecentlyPlayed,
 } from "./features/spotify-user-info";
 import { listenBrainz } from "./lib/listenBrainz";
+import { getAllListens } from "./features/listens";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -59,7 +60,7 @@ function App() {
       <button type="button" onClick={handleGetRecentlyPlayed}>
         Get recently played
       </button>
-      <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
+      <button onClick={getAllListens}>Log on to listenbrainz</button>
     </>
   );
 }
