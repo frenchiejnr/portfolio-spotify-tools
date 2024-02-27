@@ -1,8 +1,11 @@
 import { listenBrainz } from "@/lib/listenBrainz";
+import { Listen, Recent_Listens_Payload } from "./types";
+import storage from "@/utils/storage";
 
 export const getUserName = async () => {
   const response: any = await listenBrainz.get("/1/validate-token");
   const username = response.user_name;
+  storage.setUserName(username);
   return username;
 };
 
@@ -13,24 +16,30 @@ export const getListenCount = async () => {
   );
   console.log(response.payload.count);
 };
-export const listens = [];
+export const listens: any = [];
 
-export const getAllListens = async (maxts?: string) => {
-  const username = await getUserName();
+export const getAllListens = async (maxts?: number) => {
+  let username = storage.getUserName();
+  if (!username) {
+    username = await getUserName();
+  }
   const params: any = {};
   params.count = 1000;
   if (maxts) {
     params.max_ts = maxts;
   }
-  let response: any = await listenBrainz.get(`/1/user/${username}/listens`, {
-    params,
-  });
+  let response: Recent_Listens_Payload = await listenBrainz.get(
+    `/1/user/${username}/listens`,
+    {
+      params,
+    }
+  );
   for (const listen of response.payload.listens) {
     listens.push(listen);
   }
   let payload_count = response.payload.count;
   while (payload_count !== 0) {
-    let nextMaxTs =
+    let nextMaxTs: number =
       response.payload.listens[response.payload.listens.length - 1].listened_at;
     await getAllListens(nextMaxTs);
     break;
@@ -38,18 +47,33 @@ export const getAllListens = async (maxts?: string) => {
   return;
 };
 
-export const getListOfArtists = async (listens = []) => {
-  const artistCounts: { [artist: string]: number } = {};
-  if (listens.length === 0) {
+export const countItems = async (
+  listens: Listen[] = [],
+  key: "artist_name" | "release_name" | "track_name"
+) => {
+  const counts: { [item: string]: number } = {};
+  if (!listens.length) {
     await getAllListens();
   }
-  console.log(listens);
+
   for (const listen of listens) {
-    const artist = listen.track_metadata.artist_name;
-    if (!artistCounts[artist]) {
-      artistCounts[artist] = 0;
+    const item = listen.track_metadata[key];
+
+    if (!counts[item]) {
+      counts[item] = 0;
     }
-    artistCounts[artist]++;
+    counts[item]++;
   }
-  return artistCounts;
+  return counts;
+};
+
+export const getListOfArtists = async (listens: Listen[] = []) => {
+  return await countItems(listens, "artist_name");
+};
+
+export const getListOfAlbums = async (listens: Listen[] = []) => {
+  return await countItems(listens, "release_name");
+};
+export const getListOfTracks = async (listens: Listen[] = []) => {
+  return await countItems(listens, "track_name");
 };

@@ -10,6 +10,15 @@ const storage = {
   clearToken: (service: string) => {
     window.localStorage.removeItem(`${service}_token`);
   },
+  getUserName: () => {
+    return JSON.parse(window.localStorage.getItem(`username`) as string);
+  },
+  setUserName: (username: string) => {
+    window.localStorage.setItem(`username`, JSON.stringify(username));
+  },
+  clearUsername: () => {
+    window.localStorage.removeItem(`username`);
+  },
   getCodeVerifier: () => {
     return window.localStorage.getItem(`code_verifier`);
   },

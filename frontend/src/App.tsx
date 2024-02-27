@@ -9,7 +9,12 @@ import {
   handleGetMe,
   handleGetRecentlyPlayed,
 } from "./features/spotify-user-info";
-import { getListOfArtists, listens } from "./features/listens";
+import {
+  getListOfAlbums,
+  getListOfArtists,
+  getListOfTracks,
+  listens,
+} from "./features/listens";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -28,7 +33,11 @@ function App() {
   }, []);
 
   const handleListenBrainz = async () => {
-    const response = await getListOfArtists(listens);
+    let response = await getListOfArtists(listens);
+    console.log(response);
+    response = await getListOfAlbums(listens);
+    console.log(response);
+    response = await getListOfTracks(listens);
     console.log(response);
   };
 
