@@ -9,8 +9,7 @@ import {
   handleGetMe,
   handleGetRecentlyPlayed,
 } from "./features/spotify-user-info";
-import { listenBrainz } from "./lib/listenBrainz";
-import { getAllListens } from "./features/listens";
+import { getListOfArtists, listens } from "./features/listens";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -29,7 +28,7 @@ function App() {
   }, []);
 
   const handleListenBrainz = async () => {
-    const response = await listenBrainz.get("/1/validate-token");
+    const response = await getListOfArtists(listens);
     console.log(response);
   };
 
@@ -60,7 +59,7 @@ function App() {
       <button type="button" onClick={handleGetRecentlyPlayed}>
         Get recently played
       </button>
-      <button onClick={getAllListens}>Log on to listenbrainz</button>
+      <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
     </>
   );
 }

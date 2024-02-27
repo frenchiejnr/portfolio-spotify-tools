@@ -13,25 +13,43 @@ export const getListenCount = async () => {
   );
   console.log(response.payload.count);
 };
+export const listens = [];
 
-export const getAllListens = async (e: any, maxts?: string) => {
+export const getAllListens = async (maxts?: string) => {
   const username = await getUserName();
   const params: any = {};
   params.count = 1000;
   if (maxts) {
     params.max_ts = maxts;
   }
-  const response: any = await listenBrainz.get(`/1/user/${username}/listens`, {
+  let response: any = await listenBrainz.get(`/1/user/${username}/listens`, {
     params,
   });
-  console.log(response);
-
-  if (response.payload.count > 0) {
-    console.log(response.payload.count);
-    getAllListens(
-      e,
-      response.payload.listens[response.payload.listens.length - 1].listened_at
-    );
+  for (const listen of response.payload.listens) {
+    listens.push(listen);
   }
-  console.log(`finished`);
+  let payload_count = response.payload.count;
+  while (payload_count !== 0) {
+    let nextMaxTs =
+      response.payload.listens[response.payload.listens.length - 1].listened_at;
+    await getAllListens(nextMaxTs);
+    break;
+  }
+  return;
+};
+
+export const getListOfArtists = async (listens = []) => {
+  const artistCounts: { [artist: string]: number } = {};
+  if (listens.length === 0) {
+    await getAllListens();
+  }
+  console.log(listens);
+  for (const listen of listens) {
+    const artist = listen.track_metadata.artist_name;
+    if (!artistCounts[artist]) {
+      artistCounts[artist] = 0;
+    }
+    artistCounts[artist]++;
+  }
+  return artistCounts;
 };
