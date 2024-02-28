@@ -15,6 +15,7 @@ import {
   getListOfTracks,
   listens,
 } from "./features/listens";
+import { ArtistsList } from "@/features/listens/components/ArtistsList";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -69,6 +70,7 @@ function App() {
         Get recently played
       </button>
       <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
+      <ArtistsList />
     </>
   );
 }
