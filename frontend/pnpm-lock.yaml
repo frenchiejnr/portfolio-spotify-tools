@@ -11,6 +11,9 @@ dependencies:
   crypto-browserify:
     specifier: ^3.12.0
     version: 3.12.0
+  idb:
+    specifier: ^8.0.0
+    version: 8.0.0
   nanoid:
     specifier: ^5.0.6
     version: 5.0.6
@@ -1648,6 +1651,10 @@ packages:
       hash.js: 1.1.7
       minimalistic-assert: 1.0.1
       minimalistic-crypto-utils: 1.0.1
+    dev: false
+
+  /idb@8.0.0:
+    resolution: {integrity: sha512-l//qvlAKGmQO31Qn7xdzagVPPaHTxXx199MhrAFuVBTPqydcPYBWjkrbv4Y0ktB+GmWOiwHl237UUOrLmQxLvw==}
     dev: false
 
   /ignore@5.3.1:

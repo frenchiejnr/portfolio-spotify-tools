@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { getListOfArtists, listens } from "..";
+import { getData } from "@/utils/indexDB";
 
 export const ArtistsList = () => {
   const [artists, setArtists] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    async function getArtists() {
-      const response = await getListOfArtists(listens);
-      setArtists(response);
-      console.log(listens);
-      console.log(artists);
-    }
+    const getArtists = async () => {
+      setIsLoading(true);
+      const response = await getListOfArtists();
+      console.log(response);
+      setArtists(() => response);
+      setIsLoading(false);
+    };
     getArtists();
   }, []);
 
@@ -18,15 +21,21 @@ export const ArtistsList = () => {
   );
 
   return (
-    <>
-      <h1>Artist List</h1>
-      <p>Total artists {Object.keys(artists).length}</p>
-      {sortedArtists.map((artist) => (
+    <div>
+      {isLoading ? (
+        <p>Loading Artists</p>
+      ) : (
         <>
-          <p key={artist[0]}>{artist[0]}</p>
-          <p key={artist[0]}>{artist[1]}</p>
+          <h1>Artist List</h1>
+          <p>Total artists {Object.keys(artists).length}</p>
+          {sortedArtists.map((artist) => (
+            <div key={artist[0]}>
+              <p>{artist[0]}</p>
+              <p>{artist[1]}</p>
+            </div>
+          ))}
         </>
-      ))}
-    </>
+      )}
+    </div>
   );
 };
