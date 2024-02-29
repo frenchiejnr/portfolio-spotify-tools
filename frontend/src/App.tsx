@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect } from "react";
 import "./App.css";
 import { AccessTokenButton } from "./features/auth/components/AccessTokenButton";
 import storage from "./utils/storage";
@@ -8,18 +6,17 @@ import { getAccessToken } from "./features/auth";
 import {
   handleGetMe,
   handleGetRecentlyPlayed,
-} from "./features/spotify-user-info";
+} from "@/features/spotify-user-info";
 import {
   getListOfAlbums,
   getListOfArtists,
   getListOfTracks,
-  listens,
 } from "./features/listens";
 import { ArtistsList } from "@/features/listens/components/ArtistsList";
+import { AlbumsList } from "@/features/listens/components/AlbumsList";
+import { TracksList } from "@/features/listens/components/TracksList";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   useEffect(() => {
     const getToken = async () => {
       const args = new URLSearchParams(window.location.search);
@@ -51,6 +48,8 @@ function App() {
       </button>
       <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
       <ArtistsList />
+      <AlbumsList />
+      <TracksList />
     </>
   );
 }

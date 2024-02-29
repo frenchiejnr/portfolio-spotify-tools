@@ -12,7 +12,7 @@ export const getUserName = async () => {
 
 export const getListenCount = async (username: string) => {
   const response: any = await listenBrainz.get(
-    `/1/user/${username}/listen-count`
+    `/1/user/${username}/listen-count`,
   );
   return response.payload.count;
 };
@@ -31,7 +31,7 @@ export const fetchListens = async (fresh = false, timeStamp?: number) => {
     `/1/user/${username}/listens`,
     {
       params,
-    }
+    },
   );
 
   for (const listen of response.payload.listens) {
@@ -78,7 +78,7 @@ export const checkForListens = async () => {
 
 export const countItems = async (
   listens: Listen[] = [],
-  key: "artist_name" | "release_name" | "track_name"
+  key: "artist_name" | "release_name" | "track_name",
 ) => {
   const counts: { [item: string]: number } = {};
   for (const listen of listens) {
@@ -93,7 +93,7 @@ export const countItems = async (
 };
 
 const fetchAndCount = async (
-  key: "artist_name" | "release_name" | "track_name"
+  key: "artist_name" | "release_name" | "track_name",
 ) => {
   const listens = await checkForListens();
   return await countItems(listens, key);
@@ -104,8 +104,8 @@ export const getListOfArtists = async () => {
 };
 
 export const getListOfAlbums = async () => {
-  fetchAndCount("release_name");
+  return await fetchAndCount("release_name");
 };
 export const getListOfTracks = async () => {
-  fetchAndCount("track_name");
+  return await fetchAndCount("track_name");
 };
