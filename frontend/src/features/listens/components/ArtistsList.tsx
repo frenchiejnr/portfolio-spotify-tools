@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getListOfArtists, listens } from "..";
-import { getData } from "@/utils/indexDB";
+import { getListOfArtists } from "..";
+import Pagination from "@/components/Pagination";
 
 export const ArtistsList = () => {
   const [artists, setArtists] = useState({});
@@ -9,7 +9,6 @@ export const ArtistsList = () => {
     const getArtists = async () => {
       setIsLoading(true);
       const response = await getListOfArtists();
-      console.log(response);
       setArtists(() => response);
       setIsLoading(false);
     };
@@ -17,7 +16,7 @@ export const ArtistsList = () => {
   }, []);
 
   const sortedArtists = Object.entries(artists).sort(
-    ([keyA, valueA], [keyB, valueB]) => valueB - valueA
+    ([keyA, valueA], [keyB, valueB]) => valueB - valueA,
   );
 
   return (
@@ -28,12 +27,18 @@ export const ArtistsList = () => {
         <>
           <h1>Artist List</h1>
           <p>Total artists {Object.keys(artists).length}</p>
-          {sortedArtists.map((artist) => (
+          <Pagination
+            totalCount={Object.keys(artists).length}
+            pageSize={10}
+            data={sortedArtists}
+          />
+
+          {/* {sortedArtists.map((artist) => (
             <div key={artist[0]}>
               <p>{artist[0]}</p>
               <p>{artist[1]}</p>
             </div>
-          ))}
+          ))} */}
         </>
       )}
     </div>
