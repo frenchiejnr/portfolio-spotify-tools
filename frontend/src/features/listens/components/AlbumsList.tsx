@@ -1,4 +1,4 @@
-import { getListOfAlbums } from "..";
+import { getListOfAlbums } from "../utils";
 import { DataList } from "./DataList";
 
 export const AlbumsList = () => {

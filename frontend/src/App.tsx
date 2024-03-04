@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { AccessTokenButton } from "./features/auth/components/AccessTokenButton";
 import storage from "./utils/storage";
@@ -8,15 +8,19 @@ import {
   handleGetRecentlyPlayed,
 } from "@/features/spotify-user-info";
 import {
+  checkForListens,
   getListOfAlbums,
   getListOfArtists,
   getListOfTracks,
-} from "./features/listens";
+} from "./features/listens/utils";
 import { ArtistsList } from "@/features/listens/components/ArtistsList";
 import { AlbumsList } from "@/features/listens/components/AlbumsList";
 import { TracksList } from "@/features/listens/components/TracksList";
+import { RecentListens } from "./features/listens/components/RecentListens";
 
 function App() {
+  const [isFetchingListens, setIsFetchingListens] = useState(false);
+
   useEffect(() => {
     const getToken = async () => {
       const args = new URLSearchParams(window.location.search);
@@ -30,6 +34,15 @@ function App() {
     getToken();
   }, []);
 
+  useEffect(() => {
+    getListens();
+  }, []);
+  const getListens = async () => {
+    setIsFetchingListens(true);
+    await checkForListens();
+    setIsFetchingListens(false);
+  };
+
   const handleListenBrainz = async () => {
     let response = await getListOfArtists();
     console.log(response);
@@ -41,6 +54,10 @@ function App() {
 
   return (
     <>
+      <button disabled={isFetchingListens} onClick={getListens}>
+        Check For More Listens
+      </button>
+      <br />
       <AccessTokenButton />
       <button onClick={handleGetMe}>Get me</button>
       <button type="button" onClick={handleGetRecentlyPlayed}>
@@ -50,6 +67,7 @@ function App() {
       <ArtistsList />
       <AlbumsList />
       <TracksList />
+      <RecentListens />
     </>
   );
 }

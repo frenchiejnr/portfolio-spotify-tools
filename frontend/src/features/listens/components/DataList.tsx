@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
+import { ListComponent } from "./ListComponent";
 
-export const DataList = ({ getData, title }) => {
+export const DataList = ({ getData, title }: { getData: any; title: any }) => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -15,8 +16,9 @@ export const DataList = ({ getData, title }) => {
     fetchData();
   }, []);
 
-  const sortedData = Object.entries(data).sort(
-    ([keyA, valueA], [keyB, valueB]) => valueB - valueA,
+  const sortedData = Object.entries<any>(data).sort(
+    ([, valueA]: [string, number], [, valueB]: [string, number]) =>
+      valueB - valueA,
   );
 
   return (
@@ -25,14 +27,15 @@ export const DataList = ({ getData, title }) => {
         <p>Loading {title}</p>
       ) : (
         <>
-          <h1>{title} List</h1>
-          <p>
-            Total {title} {Object.keys(data).length}
+          <h1 className="text-xl font-bold my-2">{title} List</h1>
+          <p className="text-lg font-semibold mb-1">
+            Total {title} - {Object.keys(data).length}
           </p>
           <Pagination
             totalCount={Object.keys(data).length}
             pageSize={10}
             data={sortedData}
+            ItemComponent={ListComponent}
           />
         </>
       )}

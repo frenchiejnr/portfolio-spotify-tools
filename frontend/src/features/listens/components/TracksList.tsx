@@ -1,4 +1,4 @@
-import { getListOfTracks } from "..";
+import { getListOfTracks } from "../utils";
 import { DataList } from "./DataList";
 
 export const TracksList = () => {
