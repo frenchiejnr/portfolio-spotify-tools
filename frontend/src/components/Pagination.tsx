@@ -25,7 +25,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const startIndex = currentPage * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const subset = data.slice(startIndex, endIndex);
+  const subset = data?.slice(startIndex, endIndex);
 
   const handlePageChange = (selectedPage: any) => {
     setCurrentPage(selectedPage.selected);

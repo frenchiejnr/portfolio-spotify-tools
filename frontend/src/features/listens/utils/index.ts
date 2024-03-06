@@ -55,20 +55,20 @@ export const fetchListens = async (fresh = false, timeStamp?: number) => {
 };
 export const checkForListens = async () => {
   const onServerCount: number = await getListenCount(await getUserName());
-  let listens: Listen[] = (await getData("listens")) || [];
+  let storedListens: Listen[] = (await getData("listens")) || [];
   let newListens: Listen[];
 
-  if (!listens.length) {
+  if (!storedListens.length) {
     newListens = await fetchListens(true);
     setData("listens", newListens);
-  } else if (onServerCount <= listens.length) {
-    console.log(onServerCount, listens.length);
-    return listens;
+  } else if (onServerCount <= storedListens.length) {
+    console.log(onServerCount, storedListens.length);
+    return storedListens;
   } else {
-    const timestamp = listens[0].listened_at;
+    const timestamp = storedListens[0].listened_at;
     newListens = await fetchListens(false, timestamp);
-    listens = [...newListens, ...listens];
-    setData("listens", listens);
+    storedListens = [...newListens, ...storedListens];
+    setData("listens", storedListens);
   }
 };
 
@@ -76,16 +76,38 @@ export const countItems = async (
   listens: Listen[] = [],
   key: "artist_name" | "release_name" | "track_name",
 ) => {
-  const counts: { [item: string]: number } = {};
+  const results: { name: string; url: string; count: number }[] = [];
+
   for (const listen of listens) {
     const item = listen.track_metadata[key];
+    const existingIndex = results.findIndex((entry) => entry.name === item);
 
-    if (!counts[item]) {
-      counts[item] = 0;
+    if (existingIndex !== -1) {
+      // Item already exists, increase count
+      results[existingIndex].count++;
+    } else {
+      let url;
+      switch (key) {
+        case "artist_name":
+          url = listen.track_metadata.additional_info.spotify_artist_ids;
+          break;
+        case "release_name":
+          url = listen.track_metadata.additional_info.spotify_album_id;
+          break;
+        case "track_name":
+          url = listen.track_metadata.additional_info.origin_url;
+          break;
+
+        default:
+          url = "";
+          break;
+      }
+      // New item, add to results with count 1
+      results.push({ name: item, url, count: 1 });
     }
-    counts[item]++;
   }
-  return counts;
+
+  return results;
 };
 
 export const getListOfArtists = async () => {

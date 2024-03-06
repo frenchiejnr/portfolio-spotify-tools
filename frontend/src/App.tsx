@@ -20,6 +20,7 @@ import { RecentListens } from "./features/listens/components/RecentListens";
 
 function App() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const getToken = async () => {
@@ -38,9 +39,14 @@ function App() {
     getListens();
   }, []);
   const getListens = async () => {
+    if (isFetchingListens) {
+      return;
+    }
     setIsFetchingListens(true);
+    setRefresh(true);
     await checkForListens();
     setIsFetchingListens(false);
+    setRefresh(false);
   };
 
   const handleListenBrainz = async () => {
@@ -64,10 +70,10 @@ function App() {
         Get recently played
       </button>
       <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
-      <ArtistsList />
-      <AlbumsList />
-      <TracksList />
-      <RecentListens />
+      <ArtistsList refresh={refresh} />
+      <AlbumsList refresh={refresh} />
+      <TracksList refresh={refresh} />
+      <RecentListens refresh={refresh} />
     </>
   );
 }

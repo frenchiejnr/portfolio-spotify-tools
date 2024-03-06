@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 import Pagination from "@/components/Pagination";
 import { ListComponent } from "./ListComponent";
 
-export const DataList = ({ getData, title }: { getData: any; title: any }) => {
-  const [data, setData] = useState({});
+export const DataList = ({
+  getData,
+  title,
+  refresh,
+}: {
+  getData: any;
+  title: any;
+  refresh: boolean;
+}) => {
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(`reloading`);
       setIsLoading(true);
       const response = await getData();
       setData(() => response);
@@ -16,10 +25,7 @@ export const DataList = ({ getData, title }: { getData: any; title: any }) => {
     fetchData();
   }, []);
 
-  const sortedData = Object.entries<any>(data).sort(
-    ([, valueA]: [string, number], [, valueB]: [string, number]) =>
-      valueB - valueA,
-  );
+  const sortedData = data.sort((a, b) => b.count - a.count);
 
   return (
     <div>
@@ -29,12 +35,12 @@ export const DataList = ({ getData, title }: { getData: any; title: any }) => {
         <>
           <h1 className="text-xl font-bold my-2">{title} List</h1>
           <p className="text-lg font-semibold mb-1">
-            Total {title} - {Object.keys(data).length}
+            Total {title} - {sortedData.length}
           </p>
           <Pagination
-            totalCount={Object.keys(data).length}
+            totalCount={sortedData.length}
             pageSize={10}
-            data={sortedData}
+            data={data}
             ItemComponent={ListComponent}
           />
         </>

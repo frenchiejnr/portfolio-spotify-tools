@@ -3,19 +3,22 @@ import { getData } from "@/utils/indexDB";
 import { useEffect, useState } from "react";
 import { ListenComponent } from "./Listen";
 
-export const RecentListens = () => {
+export const RecentListens = ({ refresh }: { refresh: boolean }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(`refreshing recent listens`);
       setIsLoading(true);
       const response = await getData("listens");
       setData(() => response);
       setIsLoading(false);
     };
-    fetchData();
-  }, []);
+    if (refresh) {
+      fetchData();
+    }
+  }, [, refresh]);
 
   return (
     <>
