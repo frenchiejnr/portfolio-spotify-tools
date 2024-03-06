@@ -18,8 +18,15 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
       </p>
       <p className="basis-1/4">
         <a
-          href={`${item.track_metadata.additional_info.spotify_album_artist_ids[0]}`}
-          target="_blank"
+          href={
+            item.track_metadata.additional_info.spotify_album_artist_ids?.[0] ||
+            "javascript:void(0);"
+          }
+          target={
+            item.track_metadata.additional_info.spotify_album_artist_ids?.[0]
+              ? "_blank"
+              : ""
+          }
           className="hover:bg-violet-400"
         >
           {item.track_metadata.artist_name}
