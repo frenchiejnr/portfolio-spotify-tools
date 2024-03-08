@@ -4,7 +4,6 @@ import storage from "@/utils/storage";
 import { UsersRecentlyPlayedTracksResponse } from "spotify-api";
 
 export const handleGetMe = async () => {
-  console.log(storage.getToken("spotify"));
   const userData = await spotify.get("/me", {
     headers: {
       Authorization: `Bearer ${storage.getToken("spotify")}`,
@@ -16,7 +15,7 @@ export const handleGetMe = async () => {
 export const handleGetRecentlyPlayed = async (
   e: React.MouseEvent<HTMLButtonElement>,
   after?: string,
-  limit = 10
+  limit = 10,
 ) => {
   e.preventDefault();
   const url = `/me/player/recently-played`;

@@ -23,7 +23,7 @@ export const DataList = ({
       setIsLoading(false);
     };
     fetchData();
-  }, []);
+  }, [, refresh]);
 
   const sortedData = data.sort((a, b) => b.count - a.count);
 

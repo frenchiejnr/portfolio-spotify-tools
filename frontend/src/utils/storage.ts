@@ -1,14 +1,50 @@
 const storage = {
   getToken: (service: string) => {
-    return JSON.parse(
-      window.localStorage.getItem(`${service}_token`) as string
-    );
+    try {
+      const token = JSON.parse(
+        window.localStorage.getItem(`${service}_token`) as string,
+      );
+      return token;
+    } catch (error) {
+      console.error(`Failed to parse token for ${service}`, error);
+      return null; // Or return a different default value
+    }
   },
   setToken: (service: string, token: string) => {
     window.localStorage.setItem(`${service}_token`, JSON.stringify(token));
   },
   clearToken: (service: string) => {
     window.localStorage.removeItem(`${service}_token`);
+  },
+  getRefreshToken: (service: string) => {
+    return JSON.parse(
+      window.localStorage.getItem(`${service}_refresh_token`) as string,
+    );
+  },
+  setRefreshToken: (service: string, token: string) => {
+    window.localStorage.setItem(
+      `${service}_refresh_token`,
+      JSON.stringify(token),
+    );
+  },
+  clearRefreshToken: (service: string) => {
+    window.localStorage.removeItem(`${service}_expires_in`);
+  },
+  getExpiresIn: (service: string) => {
+    return JSON.parse(
+      window.localStorage.getItem(`${service}_expires_in`) as string,
+    );
+  },
+  setExpiresIn: (service: string, token: number) => {
+    const now = new Date();
+    const expiry = new Date(now.getTime() + token * 1000);
+    window.localStorage.setItem(
+      `${service}_expires_in`,
+      JSON.stringify(expiry),
+    );
+  },
+  clearExpiresIn: (service: string) => {
+    window.localStorage.removeItem(`${service}_refresh_token`);
   },
   getUserName: () => {
     return JSON.parse(window.localStorage.getItem(`username`) as string);

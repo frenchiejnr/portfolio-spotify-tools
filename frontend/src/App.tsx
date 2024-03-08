@@ -17,22 +17,35 @@ import { ArtistsList } from "@/features/listens/components/ArtistsList";
 import { AlbumsList } from "@/features/listens/components/AlbumsList";
 import { TracksList } from "@/features/listens/components/TracksList";
 import { RecentListens } from "./features/listens/components/RecentListens";
+import Playlists from "./features/spotify-playlists/components/Playlists";
 
 function App() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [validToken, setValidToken] = useState(false);
 
   useEffect(() => {
-    const getToken = async () => {
-      const args = new URLSearchParams(window.location.search);
-      const code = args.get("code");
-      if (code) {
-        const token = await getAccessToken(code);
-        storage.setToken("spotify", `Bearer ${token.access_token}`);
-        storage.setAccessToken(token);
+    const retrieveSpotifyToken = async () => {
+      const existingToken = storage.getToken("spotify");
+      if (existingToken && existingToken !== "Bearer undefined") {
+        // Token is present and valid, no need to fetch again
+        setValidToken(true);
+        return;
       }
+      const urlParams = new URLSearchParams(window.location.search);
+      const authCode = urlParams.get("code");
+      if (authCode) {
+        const tokenResponse = await getAccessToken(authCode);
+        const { access_token, refresh_token, expires_in } = tokenResponse;
+        storage.setToken("spotify", `Bearer ${access_token}`);
+        storage.setRefreshToken("spotify", `${refresh_token}`);
+        storage.setExpiresIn("spotify", `${parseInt(expires_in)}`);
+        setValidToken(true);
+        return;
+      }
+      setValidToken(false);
     };
-    getToken();
+    retrieveSpotifyToken();
   }, []);
 
   useEffect(() => {
@@ -64,16 +77,25 @@ function App() {
         Check For More Listens
       </button>
       <br />
-      <AccessTokenButton />
+
       <button onClick={handleGetMe}>Get me</button>
       <button type="button" onClick={handleGetRecentlyPlayed}>
         Get recently played
       </button>
       <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
-      <ArtistsList refresh={refresh} />
-      <AlbumsList refresh={refresh} />
-      <TracksList refresh={refresh} />
-      <RecentListens refresh={refresh} />
+      {isFetchingListens ? (
+        <h1>Fetching Listens - Fetched x listens</h1>
+      ) : (
+        <>
+          <br />
+          {validToken ? <Playlists /> : <AccessTokenButton />}
+          <br />
+          <ArtistsList refresh={refresh} />
+          <AlbumsList refresh={refresh} />
+          <TracksList refresh={refresh} />
+          <RecentListens refresh={refresh} />
+        </>
+      )}
     </>
   );
 }

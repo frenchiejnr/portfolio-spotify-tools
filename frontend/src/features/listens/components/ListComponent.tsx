@@ -5,10 +5,7 @@ export const ListComponent: React.FC<{
 }> = ({ item }) => (
   <div key={item} className="flex w-2/5 justify-between mx-auto">
     <div className="flex">
-      <a
-        href={item.url ? item.url : "javascript:void(0);"}
-        target={item.url ? "_blank" : ""}
-      >
+      <a href={item.url ? item.url : "#"} target={item.url ? "_blank" : ""}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 496 512"

@@ -15,9 +15,7 @@ export const RecentListens = ({ refresh }: { refresh: boolean }) => {
       setData(() => response);
       setIsLoading(false);
     };
-    if (refresh) {
-      fetchData();
-    }
+    fetchData();
   }, [, refresh]);
 
   return (

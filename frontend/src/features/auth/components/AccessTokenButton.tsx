@@ -1,9 +1,14 @@
-import { getAccessToken, requestUserAuthorization } from "..";
+import {
+  getAccessToken,
+  getSpotifyAuthToken,
+  requestUserAuthorization,
+} from "..";
 
 export const AccessTokenButton = () => {
   return (
     <button
       onClick={async () => {
+        await getSpotifyAuthToken();
         // Retrieve authorization code
         await requestUserAuthorization();
 

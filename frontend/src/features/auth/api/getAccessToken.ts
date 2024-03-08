@@ -1,7 +1,12 @@
 import { SPOTIFY_CLIENT_ID, REDIRECT_URI } from "@/config";
+import storage from "@/utils/storage";
 
-export async function getAccessToken(code: string) {
-  const code_verifier = localStorage.getItem("code_verifier");
+export const getAccessToken = async (code: string) => {
+  const code_verifier = storage.getCodeVerifier();
+  if (!code) {
+    throw new Error("Missing code_verifier");
+  }
+
   const tokenEndpoint = "https://accounts.spotify.com/api/token";
 
   const response = await fetch(tokenEndpoint, {
@@ -12,11 +17,15 @@ export async function getAccessToken(code: string) {
     body: new URLSearchParams({
       client_id: SPOTIFY_CLIENT_ID,
       grant_type: "authorization_code",
-      code: code,
+      code,
       redirect_uri: REDIRECT_URI,
       code_verifier: code_verifier!,
     }),
   });
 
+  if (!response.ok) {
+    throw new Error(`Failed to fetch access token: ${response.status}`);
+  }
+
   return await response.json();
-}
+};
