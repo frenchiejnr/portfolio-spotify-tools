@@ -1,5 +1,4 @@
 import Pagination from "@/components/Pagination";
-import { getSpotifyAuthToken } from "@/features/auth";
 import { checkForValidAccessToken } from "@/features/auth/api/checkForValidAccessToken";
 import { ListComponent } from "@/features/listens/components/ListComponent";
 import { spotify } from "@/lib/spotify";
@@ -11,7 +10,9 @@ const Playlists = () => {
     const getPlaylists = async () => {
       const isTokenValid = await checkForValidAccessToken();
       if (isTokenValid) {
-        const response = await spotify.get("/me/playlists");
+        // TODO
+        // IF MORE THAN 50 playlists, get all of them.
+        const response = await spotify.get("me/playlists?limit=50");
         console.log(response);
         setData(() => response.items);
       }
