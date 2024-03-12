@@ -1,8 +1,8 @@
 import Pagination from "@/components/Pagination";
 import { checkForValidAccessToken } from "@/features/auth/api/checkForValidAccessToken";
-import { ListComponent } from "@/features/listens/components/ListComponent";
 import { spotify } from "@/lib/spotify";
 import { useEffect, useState } from "react";
+import { PlaylistItems } from "./PlaylistItems";
 
 const Playlists = () => {
   const [data, setData] = useState([]);
@@ -26,7 +26,7 @@ const Playlists = () => {
         totalCount={data.length}
         pageSize={10}
         data={data}
-        ItemComponent={ListComponent}
+        ItemComponent={PlaylistItems}
       />
     </>
   );
