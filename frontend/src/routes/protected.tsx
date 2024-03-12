@@ -1,4 +1,5 @@
 import Playlist from "@/features/spotify-playlists/components/Playlist";
+import Playlists from "@/features/spotify-playlists/components/Playlists";
 
 import { spotify } from "@/lib/spotify";
 import { Outlet, RouteObject } from "react-router-dom";
@@ -12,6 +13,7 @@ export const ProtectedRoutes: RouteObject[] = [
     path: "",
     element: <ProtectedRoute />,
     children: [
+      { path: "/playlists", element: <Playlists /> },
       {
         path: "/playlists/:playlistId",
         element: <Playlist />,

@@ -10,7 +10,7 @@ export const PlaylistItems: React.FC<{
       <div className="flex">
         <SpotifyLink url={item.external_urls.spotify} />
         <Link
-          to={`playlists/${item.uri.split(":")[2]}`}
+          to={`${item.uri.split(":")[2]}`}
           className="hover:bg-violet-400 ml-1"
         >
           {item.name}

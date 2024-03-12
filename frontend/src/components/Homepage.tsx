@@ -15,9 +15,9 @@ import {
   getListOfArtists,
   getListOfTracks,
 } from "@/features/listens/utils";
-import Playlists from "@/features/spotify-playlists/components/Playlists";
 import { AccessTokenButton } from "@/features/auth/components/AccessTokenButton";
 import { RecentListens } from "@/features/listens/components/RecentListens";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
@@ -77,6 +77,11 @@ function HomePage() {
         Check For More Listens
       </button>
       <br />
+      {validToken ? (
+        <Link to={"/playlists"}>Playlists</Link>
+      ) : (
+        <AccessTokenButton />
+      )}
 
       <button onClick={handleGetMe}>Get me</button>
       <button type="button" onClick={handleGetRecentlyPlayed}>
@@ -88,7 +93,6 @@ function HomePage() {
       ) : (
         <>
           <br />
-          {validToken ? <Playlists /> : <AccessTokenButton />}
           <br />
           <ArtistsList refresh={refresh} />
           <AlbumsList refresh={refresh} />

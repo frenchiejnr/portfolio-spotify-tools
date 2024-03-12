@@ -5,11 +5,10 @@ export const PlaylistTracks: React.FC<{
   item: SpotifyApi.PlaylistTrackObject;
 }> = ({ item }) => (
   <div key={item.track?.id} className="flex w-2/5 justify-between mx-auto">
-    <div className="flex">
-      <SpotifyLink url={item.track?.external_urls.spotify} />
-      <a href="" target="_blank" className="hover:bg-violet-400 ml-1">
-        <p>{item.track?.name}</p>
-      </a>
+    <SpotifyLink url={item.track?.external_urls.spotify} />
+    <div className="hover:bg-violet-400 ml-1">
+      <p>{item.track?.name}</p>
     </div>
+    {/* TODO: Number of times track listened to */}
   </div>
 );
