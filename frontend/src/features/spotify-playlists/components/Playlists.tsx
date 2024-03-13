@@ -13,7 +13,6 @@ const Playlists = () => {
         // TODO
         // IF MORE THAN 50 playlists, get all of them.
         const response = await spotify.get("me/playlists?limit=50");
-        console.log(response);
         setData(() => response.items);
       }
     };

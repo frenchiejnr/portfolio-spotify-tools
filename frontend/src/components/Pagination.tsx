@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import ReactPaginate from "react-paginate";
 
 interface PaginationProps {
@@ -18,7 +18,6 @@ const Pagination: React.FC<PaginationProps> = ({
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const itemsPerPage = pageSize;
-
   useEffect(() => {
     setTotalPages(Math.ceil(totalCount / itemsPerPage));
   }, [data]);
@@ -28,6 +27,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const subset = data?.slice(startIndex, endIndex);
 
   const handlePageChange = (selectedPage: any) => {
+    setTotalPages(Math.ceil(totalCount / itemsPerPage));
     setCurrentPage(selectedPage.selected);
   };
 
