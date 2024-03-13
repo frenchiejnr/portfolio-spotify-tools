@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { Listen } from "../types";
+import { SpotifyLink } from "./SpotifyLink";
 
 export const ListenComponent: React.FC<{ item: Listen }> = ({
   item,
@@ -7,39 +9,30 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
 }) => {
   return (
     <div className="flex w-4/5 justify-between mx-auto">
-      <p className="basis-1/4">
-        <a
-          href={`${item.track_metadata.additional_info.origin_url}`}
-          target="_blank"
-          className="hover:bg-violet-400"
-        >
+      <p className="basis-1/4 flex">
+        <SpotifyLink url={item.track_metadata.additional_info.origin_url} />
+        <Link to="" target="" className="hover:bg-violet-400 pl-1">
           {item.track_metadata.track_name}
-        </a>
+        </Link>
       </p>
-      <p className="basis-1/4">
-        <a
-          href={
+      <p className="basis-1/4 flex">
+        <SpotifyLink
+          url={
             item.track_metadata.additional_info.spotify_album_artist_ids?.[0] ||
-            "javascript:void(0);"
+            null
           }
-          target={
-            item.track_metadata.additional_info.spotify_album_artist_ids?.[0]
-              ? "_blank"
-              : ""
-          }
-          className="hover:bg-violet-400"
-        >
+        />
+        <Link to={""} target={""} className="hover:bg-violet-400 pl-1">
           {item.track_metadata.artist_name}
-        </a>
+        </Link>
       </p>
-      <p className="basis-1/4">
-        <a
-          href={`${item.track_metadata.additional_info.spotify_album_id}`}
-          target="_blank"
-          className="hover:bg-violet-400"
-        >
+      <p className="basis-1/4 flex">
+        <SpotifyLink
+          url={item.track_metadata.additional_info.spotify_album_id}
+        />
+        <Link to={""} target="" className="hover:bg-violet-400 pl-1">
           {item.track_metadata.release_name}
-        </a>
+        </Link>
       </p>
       <p className="basis-1/8">
         {new Date(item.listened_at * 1000).toUTCString()}
