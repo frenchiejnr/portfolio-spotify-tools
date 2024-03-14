@@ -7,6 +7,7 @@ interface PaginationProps {
   pageSize: number;
   data: any[];
   ItemComponent: React.FC<{ item: any }>;
+  songCounts?: {};
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -14,6 +15,7 @@ const Pagination: React.FC<PaginationProps> = ({
   pageSize,
   data,
   ItemComponent,
+  songCounts,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -35,7 +37,9 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="text-center">
       {subset.map((item) => {
         item.id = uuidv4();
-        return <ItemComponent key={item.id} item={item} />;
+        return (
+          <ItemComponent key={item.id} item={item} songCounts={songCounts} />
+        );
       })}
       <div className="flex justify-center mt-4">
         <ReactPaginate
