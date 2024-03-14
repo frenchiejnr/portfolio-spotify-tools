@@ -1,5 +1,6 @@
 import { SpotifyLink } from "@/features/listens/components/SpotifyLink";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const PlaylistTracks: React.FC<{
   item: SpotifyApi.PlaylistTrackObject;
@@ -9,17 +10,19 @@ export const PlaylistTracks: React.FC<{
   const listenCount = songCounts[songId] || 0;
   return (
     <div key={item.track?.id} className="flex w-4/5 justify-between mx-auto">
-      <div className="hover:bg-violet-400 ml-1 basis-1/4 flex">
+      <div className=" ml-1 basis-1/4 flex">
         <SpotifyLink url={item.track?.external_urls.spotify} />
-        <p>{item.track?.name}</p>
+        <Link to={`/track/${item.track?.id}`} className="hover:text-violet-400">
+          {item.track?.name}
+        </Link>
       </div>
-      <div className="hover:bg-violet-400 ml-1 basis-1/4 flex">
+      <div className=" ml-1 basis-1/4 flex">
         <SpotifyLink url={item.track?.artists[0].external_urls.spotify} />
-        <p>{item.track?.artists[0].name}</p>
+        <p className="hover:text-violet-400">{item.track?.artists[0].name}</p>
       </div>
-      <div className="hover:bg-violet-400 ml-1 basis-1/4 flex">
+      <div className=" ml-1 basis-1/4 flex">
         <SpotifyLink url={item.track?.album.external_urls.spotify} />
-        <p>{item.track?.album.name}</p>
+        <p className="hover:text-violet-400">{item.track?.album.name}</p>
       </div>
       {/* TODO: Number of times track listened to */}
       <div className="ml-1 basis-1/4">
