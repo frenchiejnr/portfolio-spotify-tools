@@ -5,6 +5,7 @@ import { Outlet, RouteObject } from "react-router-dom";
 import { fetchPlaylist } from "./fetchPlaylist";
 import { Suspense } from "react";
 import { TrackPage } from "@/features/spotify-playlists/components/TrackPage";
+import { ArtistPage } from "@/features/spotify-playlists/components/ArtistPage";
 
 export const ProtectedRoute = () => {
   return <Outlet />;
@@ -30,6 +31,14 @@ export const ProtectedRoutes: RouteObject[] = [
         element: (
           <Suspense fallback={<div>Loading Track...</div>}>
             <TrackPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/artist/:artistId",
+        element: (
+          <Suspense fallback={<div>Loading Artist...</div>}>
+            <ArtistPage />
           </Suspense>
         ),
       },

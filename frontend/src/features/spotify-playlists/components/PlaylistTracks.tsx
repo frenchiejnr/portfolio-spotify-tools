@@ -18,7 +18,12 @@ export const PlaylistTracks: React.FC<{
       </div>
       <div className=" ml-1 basis-1/4 flex">
         <SpotifyLink url={item.track?.artists[0].external_urls.spotify} />
-        <p className="hover:text-violet-400">{item.track?.artists[0].name}</p>
+        <Link
+          to={`/artist/${item.track?.artists[0].id}`}
+          className="hover:text-violet-400"
+        >
+          {item.track?.artists[0].name}
+        </Link>
       </div>
       <div className=" ml-1 basis-1/4 flex">
         <SpotifyLink url={item.track?.album.external_urls.spotify} />

@@ -7,11 +7,16 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
 }: {
   item: Listen;
 }) => {
+  const track_id = item?.track_metadata?.additional_info?.origin_url?.split(
+    "/track/",
+  )[1]
+    ? `/track/${item.track_metadata.additional_info.origin_url.split("/track/")[1]}`
+    : "#";
   return (
     <div className="flex w-4/5 justify-between mx-auto">
       <p className="basis-1/4 flex">
         <SpotifyLink url={item.track_metadata.additional_info.origin_url} />
-        <Link to="" target="" className="hover:bg-violet-400 pl-1">
+        <Link to={track_id} target="" className="hover:bg-violet-400 pl-1">
           {item.track_metadata.track_name}
         </Link>
       </p>

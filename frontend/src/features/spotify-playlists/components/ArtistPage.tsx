@@ -5,12 +5,11 @@ import { useMediaInfo } from "@/hooks/useMediaInfo";
 
 import { useParams } from "react-router-dom";
 
-export const TrackPage = () => {
-  const { trackId } = useParams();
+export const ArtistPage = () => {
+  const { artistId } = useParams();
 
-  const { mediaInfo, isLoading } = useMediaInfo(trackId, "track");
-  const songPlays = useMediaPlays(trackId, "track");
-  console.log(songPlays);
+  const { mediaInfo, isLoading } = useMediaInfo(artistId, "artist");
+  const songPlays = useMediaPlays(artistId, "artist");
 
   return (
     <>
@@ -19,8 +18,7 @@ export const TrackPage = () => {
       ) : (
         <>
           <div>
-            {mediaInfo?.name} - {mediaInfo?.album.name} -{" "}
-            {mediaInfo?.artists?.map((artist) => artist.name).join(", ")}
+            {mediaInfo?.name} - {songPlays?.length} Plays
           </div>
           <Pagination
             totalCount={songPlays?.length}
