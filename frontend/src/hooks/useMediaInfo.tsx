@@ -16,7 +16,7 @@ export const useMediaInfo = <T extends MediaItem>(
         mediaType === "track"
           ? `/tracks/${id}`
           : mediaType === "album"
-            ? `/album/${id}`
+            ? `/albums/${id}`
             : `/artists/${id}`;
       const response: T = await spotify.get(endpoint);
       setMediaInfo(response);

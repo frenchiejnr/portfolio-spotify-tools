@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export const useMediaPlays = (
   mediaId: string,
-  mediaType: "track" | "artist",
+  mediaType: "track" | "artist" | "album",
 ) => {
   const [mediaPlays, setMediaPlays] = useState<Listen[]>([]);
 
@@ -16,7 +16,9 @@ export const useMediaPlays = (
         const mediaIdProperty =
           mediaType === "track"
             ? listen.track_metadata.additional_info.spotify_id
-            : listen.track_metadata.additional_info.spotify_artist_ids?.[0];
+            : mediaType === "artist"
+              ? listen.track_metadata.additional_info.spotify_artist_ids?.[0]
+              : listen.track_metadata.additional_info.spotify_album_id;
 
         const regex = /\/(track|artist|album)\/([^/]+)/; // Matches "/track/" or "/artist/" followed by ID
         const match = mediaIdProperty?.match(regex);
