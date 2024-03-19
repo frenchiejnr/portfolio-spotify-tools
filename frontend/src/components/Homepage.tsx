@@ -4,9 +4,6 @@ import {
   handleGetMe,
   handleGetRecentlyPlayed,
 } from "@/features/spotify-user-info";
-import { ArtistsList } from "@/features/listens/components/ArtistsList";
-import { AlbumsList } from "@/features/listens/components/AlbumsList";
-import { TracksList } from "@/features/listens/components/TracksList";
 import storage from "@/utils/storage";
 import { getAccessToken } from "@/features/auth";
 import {
@@ -83,6 +80,9 @@ function HomePage() {
         <AccessTokenButton />
       )}
 
+      <Link to={"/album"}>Albums</Link>
+      <Link to={"/artist"}>Artists</Link>
+      <Link to={"/track"}>Tracks</Link>
       <button onClick={handleGetMe}>Get me</button>
       <button type="button" onClick={handleGetRecentlyPlayed}>
         Get recently played
@@ -92,11 +92,6 @@ function HomePage() {
         <h1>Fetching Listens - Fetched x listens</h1>
       ) : (
         <>
-          <br />
-          <br />
-          <ArtistsList refresh={refresh} />
-          <AlbumsList refresh={refresh} />
-          <TracksList refresh={refresh} />
           <RecentListens refresh={refresh} />
         </>
       )}

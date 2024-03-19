@@ -7,6 +7,9 @@ import { Suspense } from "react";
 import { TrackPage } from "@/features/spotify-playlists/components/TrackPage";
 import { ArtistPage } from "@/features/spotify-playlists/components/ArtistPage";
 import { AlbumPage } from "@/features/spotify-playlists/components/AlbumPage";
+import { AlbumsList } from "@/features/listens/components/AlbumsList";
+import { ArtistsList } from "@/features/listens/components/ArtistsList";
+import { TracksList } from "@/features/listens/components/TracksList";
 
 export const ProtectedRoute = () => {
   return <Outlet />;
@@ -48,6 +51,30 @@ export const ProtectedRoutes: RouteObject[] = [
         element: (
           <Suspense fallback={<div>Loading Album...</div>}>
             <AlbumPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/album",
+        element: (
+          <Suspense fallback={<div>Loading Albums...</div>}>
+            <AlbumsList refresh={false} />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/artist",
+        element: (
+          <Suspense fallback={<div>Loading Artists...</div>}>
+            <ArtistsList refresh={false} />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/track",
+        element: (
+          <Suspense fallback={<div>Loading Tracks...</div>}>
+            <TracksList refresh={false} />
           </Suspense>
         ),
       },
