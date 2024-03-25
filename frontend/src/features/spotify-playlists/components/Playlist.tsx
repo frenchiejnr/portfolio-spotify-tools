@@ -1,7 +1,7 @@
 import Pagination from "@/components/Pagination";
 import { Link, useLoaderData } from "react-router-dom";
 import { PlaylistTracks } from "./PlaylistTracks";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchNextTracks } from "@/routes/fetchPlaylist";
 import { getData } from "@/utils/indexDB";
 import { Listen } from "@/features/listens/types";
@@ -14,6 +14,7 @@ const Playlist = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [songCounts, setSongCounts] = useState({});
+  const [filterNoListens, setFilterNoListens] = useState(false);
 
   useEffect(() => {
     const fetchMoreTracks = async () => {
@@ -51,18 +52,36 @@ const Playlist = () => {
     getSongPlays();
   }, []);
 
+  const filteredTracks = useMemo(() => {
+    if (!filterNoListens) {
+      return playlistData.tracks.items;
+    } else {
+      return playlistData.tracks.items.filter(
+        (track) => !songCounts[track.track.id],
+      );
+    }
+  }, [[playlistData.tracks.items, songCounts, filterNoListens]]);
+
   return (
     <>
       <div>{playlistData.name}</div>
-      <div>{playlistData.tracks.total} tracks</div>
+      <div>{filteredTracks.length} tracks</div>
       <Link to={"/playlists"}>Back to Playlists</Link>
       {isLoading && (
         <p>
           {playlistData.tracks.items.length} of {playlistData.tracks.total}{" "}
           Loaded
         </p>
-      )}{" "}
-      {/* Display loading indicator */}
+      )}
+      <label for="no-listens">
+        <input
+          type="checkbox"
+          id="no-listens"
+          checked={filterNoListens}
+          onChange={(e) => setFilterNoListens(e.target.checked)}
+        />
+        Unplayed Songs only
+      </label>
       <div className="flex w-4/5 justify-between mx-auto">
         <div className=" ml-1 basis-1/4">
           <p>Track Name</p>
@@ -78,9 +97,9 @@ const Playlist = () => {
         </div>
       </div>
       <Pagination
-        totalCount={playlistData.tracks.items.length}
+        totalCount={filteredTracks.length}
         pageSize={10}
-        data={playlistData.tracks.items}
+        data={filteredTracks}
         ItemComponent={PlaylistTracks}
         songCounts={songCounts}
       />
