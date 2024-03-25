@@ -77,9 +77,13 @@ export const countItems = async (
   key: "artist_name" | "release_name" | "track_name",
 ) => {
   const results: { name: string; url: string; count: number }[] = [];
-
   for (const listen of listens) {
-    const item = listen.track_metadata[key];
+    let item;
+    if (key === "track_name") {
+      item = `${listen.track_metadata["track_name"]}-${listen.track_metadata["release_name"]}`;
+    } else {
+      item = listen.track_metadata[key];
+    }
     const existingIndex = results.findIndex((entry) => entry.name === item);
 
     if (existingIndex !== -1) {
@@ -103,6 +107,7 @@ export const countItems = async (
           break;
       }
       // New item, add to results with count 1
+
       results.push({ name: item, url, count: 1 });
     }
   }
@@ -118,4 +123,10 @@ export const getListOfAlbums = async () => {
 };
 export const getListOfTracks = async () => {
   return await countItems(await getData("listens"), "track_name");
+};
+export const getItemUrl = (item: any) => {
+  const regex = /\/(track|artist|album)\/([^/]+)/; // Matches "/track/" or "/artist/" followed by ID
+  const url = Array.isArray(item.url) ? item.url[0] : item.url;
+  const match = url?.match(regex);
+  return match;
 };

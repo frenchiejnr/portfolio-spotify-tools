@@ -15,6 +15,8 @@ import {
 import { AccessTokenButton } from "@/features/auth/components/AccessTokenButton";
 import { RecentListens } from "@/features/listens/components/RecentListens";
 import { Link } from "react-router-dom";
+import { Listen } from "@/features/listens/types";
+import { getData, setData } from "@/utils/indexDB";
 
 function HomePage() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
@@ -68,6 +70,41 @@ function HomePage() {
     console.log(response);
   };
 
+  const handleListensWithoutId = async () => {
+    const listens: Listen[] = await getData("listens");
+
+    console.log(
+      listens.filter(
+        (listen) => !listen.track_metadata.additional_info.spotify_id,
+      ).length,
+    );
+    listens
+      .filter((listen) => !listen.track_metadata.additional_info.spotify_id)
+      .forEach((listen: Listen) => {
+        const listenWithId = listens.find(
+          (item: Listen) =>
+            item.track_metadata.track_name ===
+              listen.track_metadata.track_name &&
+            item.track_metadata.release_name ===
+              listen.track_metadata.release_name &&
+            item.track_metadata.artist_name ===
+              listen.track_metadata.artist_name &&
+            item.track_metadata.additional_info.spotify_id,
+        );
+
+        if (listenWithId) {
+          listen.track_metadata.additional_info.spotify_id =
+            listenWithId.track_metadata.additional_info.spotify_id;
+        }
+      });
+    console.log(
+      listens.filter(
+        (listen) => !listen.track_metadata.additional_info.spotify_id,
+      ).length,
+    );
+    setData("listens", listens);
+  };
+
   return (
     <>
       <button disabled={isFetchingListens} onClick={getListens}>
@@ -88,6 +125,7 @@ function HomePage() {
         Get recently played
       </button>
       <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
+      <button onClick={handleListensWithoutId}>Songs missing spotify Id</button>
       {isFetchingListens ? (
         <h1>Fetching Listens - Fetched x listens</h1>
       ) : (
