@@ -2,85 +2,83 @@ import Pagination from "@/components/Pagination";
 import { Link, useLoaderData } from "react-router-dom";
 import { PlaylistTracks } from "./PlaylistTracks";
 import { useEffect, useMemo, useState } from "react";
-import { fetchNextTracks } from "@/routes/fetchPlaylist";
-import { getData } from "@/utils/indexDB";
+
+// Services
+import { fetchNextTracks as fetchMoreTracks } from "@/routes/fetchPlaylist";
+import { getData as getSongPlays } from "@/utils/indexDB";
+
+//Types
 import { Listen } from "@/features/listens/types";
 
 const Playlist = () => {
-  const [playlistData, setPlaylistData] =
+  const [playlist, setPlaylist] =
     useState<SpotifyApi.PlaylistObjectFull>(useLoaderData());
-  const [nextUrl, setNextUrl] = useState<string | null>(
-    playlistData.tracks.next,
+  const [nextPageUrl, setNextPageUrl] = useState<string | null>(
+    playlist?.tracks?.next,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [songCounts, setSongCounts] = useState({});
-  const [filterNoListens, setFilterNoListens] = useState(false);
+  const [showUnplayedOnly, setShowUnplayedOnly] = useState(false);
 
   useEffect(() => {
-    const fetchMoreTracks = async () => {
-      if (nextUrl && !isLoading) {
+    const fetchMore = async () => {
+      if (nextPageUrl && !isLoading) {
         setIsLoading(true);
-        const newPlaylistData = await fetchNextTracks(
-          playlistData,
-          nextUrl.split("/v1/")[1],
+        const newPlaylist = await fetchMoreTracks(
+          playlist,
+          nextPageUrl.split("/v1/")[1],
         );
-        const nextTracksUrl = newPlaylistData.tracks.next;
-        setPlaylistData(newPlaylistData);
-        if (nextTracksUrl) {
-          setNextUrl(nextTracksUrl);
-        } else {
-          setNextUrl(null);
-        }
+        setPlaylist(newPlaylist);
+        setNextPageUrl(newPlaylist.tracks.next);
+        const nextTracksUrl = newPlaylist.tracks.next;
         setIsLoading(false);
       }
     };
-    fetchMoreTracks();
-  }, [nextUrl, isLoading]);
+    fetchMore();
+  }, [nextPageUrl, isLoading, playlist]);
 
   useEffect(() => {
-    const getSongPlays = async () => {
-      const listens: Listen[] = await getData("listens");
-
+    const getPlays = async () => {
+      const listens: Listen[] = await getSongPlays("listens");
       const counts = listens.reduce((acc, listen) => {
-        const spotify_id =
+        const trackId =
           listen.track_metadata.additional_info.spotify_id?.split("/track/")[1];
-        acc[spotify_id] = (acc[spotify_id] || 0) + 1;
+        acc[trackId] = (acc[trackId] || 0) + 1;
         return acc;
       }, {});
       setSongCounts(counts);
     };
-    getSongPlays();
+    getPlays();
   }, []);
 
   const filteredTracks = useMemo(() => {
-    if (!filterNoListens) {
-      return playlistData.tracks.items;
+    if (!showUnplayedOnly) {
+      return playlist.tracks?.items || [];
     } else {
-      return playlistData.tracks.items.filter(
+      return (playlist.tracks?.items || []).filter(
         (track) => !songCounts[track.track.id],
       );
     }
-  }, [[playlistData.tracks.items, songCounts, filterNoListens]]);
+  }, [[playlist.tracks?.items, songCounts, showUnplayedOnly]]);
 
   return (
     <>
-      <div>{playlistData.name}</div>
+      <div>{playlist.name}</div>
       <div>{filteredTracks.length} tracks</div>
       <Link to={"/playlists"}>Back to Playlists</Link>
       {isLoading && (
         <p>
-          {playlistData.tracks.items.length} of {playlistData.tracks.total}{" "}
-          Loaded
+          {playlist.tracks?.items?.length} of {playlist.tracks?.total} Loaded
         </p>
       )}
       <label for="no-listens">
         <input
           type="checkbox"
           id="no-listens"
-          checked={filterNoListens}
-          onChange={(e) => setFilterNoListens(e.target.checked)}
+          checked={showUnplayedOnly}
+          onChange={(e) => setShowUnplayedOnly(e.target.checked)}
         />
-        Unplayed Songs only
+        Show Unplayed Songs only
       </label>
       <div className="flex w-4/5 justify-between mx-auto">
         <div className=" ml-1 basis-1/4">
