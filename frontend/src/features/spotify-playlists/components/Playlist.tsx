@@ -1,7 +1,7 @@
-import Pagination from "@/components/Pagination";
-import { Link, useLoaderData } from "react-router-dom";
-import { PlaylistTracks } from "./PlaylistTracks";
+import { useLoaderData } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { PlaylistHeader } from "./PlaylistHeader";
+import { PlaylistTracksTable } from "./PlaylistTracksTable";
 
 // Services
 import { fetchNextTracks as fetchMoreTracks } from "@/routes/fetchPlaylist";
@@ -30,7 +30,6 @@ const Playlist = () => {
         );
         setPlaylist(newPlaylist);
         setNextPageUrl(newPlaylist.tracks.next);
-        const nextTracksUrl = newPlaylist.tracks.next;
         setIsLoading(false);
       }
     };
@@ -63,42 +62,15 @@ const Playlist = () => {
 
   return (
     <>
-      <div>{playlist.name}</div>
-      <div>{filteredTracks.length} tracks</div>
-      <Link to={"/playlists"}>Back to Playlists</Link>
-      {isLoading && (
-        <p>
-          {playlist.tracks?.items?.length} of {playlist.tracks?.total} Loaded
-        </p>
-      )}
-      <label for="no-listens">
-        <input
-          type="checkbox"
-          id="no-listens"
-          checked={showUnplayedOnly}
-          onChange={(e) => setShowUnplayedOnly(e.target.checked)}
-        />
-        Show Unplayed Songs only
-      </label>
-      <div className="flex w-4/5 justify-between mx-auto">
-        <div className=" ml-1 basis-1/4">
-          <p>Track Name</p>
-        </div>
-        <div className=" ml-1 basis-1/4 ">
-          <p>Artist Name</p>
-        </div>
-        <div className=" ml-1 basis-1/4">
-          <p>Album Name</p>
-        </div>
-        <div className=" ml-1 basis-1/4">
-          <p>Number of Listens</p>
-        </div>
-      </div>
-      <Pagination
-        totalCount={filteredTracks.length}
-        pageSize={10}
-        data={filteredTracks}
-        ItemComponent={PlaylistTracks}
+      <PlaylistHeader
+        filteredTracks={filteredTracks}
+        isLoading={isLoading}
+        playlist={playlist}
+        setShowUnplayedOnly={setShowUnplayedOnly}
+        showUnplayedOnly={showUnplayedOnly}
+      />
+      <PlaylistTracksTable
+        filteredTracks={filteredTracks}
         songCounts={songCounts}
       />
     </>
