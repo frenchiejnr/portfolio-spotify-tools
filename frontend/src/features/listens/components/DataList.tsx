@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Pagination from "@/components/Pagination";
 import { ListComponent } from "./ListComponent";
 
@@ -13,6 +13,7 @@ export const DataList = ({
 }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [sortByLastPlayed, setSortByLastPlayed] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +26,13 @@ export const DataList = ({
     fetchData();
   }, [, refresh]);
 
-  const sortedData = data.sort((a, b) => b.count - a.count);
+  const sortedData = useMemo(() => {
+    if (sortByLastPlayed) {
+      return data.sort((a, b) => b.lastPlayed - a.lastPlayed);
+    } else {
+      return data.sort((a, b) => b.count - a.count);
+    }
+  }, [sortByLastPlayed]);
 
   return (
     <div>
@@ -37,6 +44,15 @@ export const DataList = ({
           <p className="text-lg font-semibold mb-1">
             Total {title} - {sortedData.length}
           </p>
+          <label htmlFor="lastPlayed">
+            <input
+              type="checkbox"
+              id="lastPlayed"
+              checked={sortByLastPlayed}
+              onChange={(e) => setSortByLastPlayed(e.target.checked)}
+            />
+            Sort by Last Played
+          </label>
           <Pagination
             totalCount={sortedData.length}
             pageSize={10}

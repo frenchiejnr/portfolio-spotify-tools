@@ -76,7 +76,12 @@ export const countItems = async (
   listens: Listen[] = [],
   key: "artist_name" | "release_name" | "track_name",
 ) => {
-  const results: { name: string; url: string; count: number }[] = [];
+  const results: {
+    name: string;
+    url: string;
+    count: number;
+    lastPlayed: Date | null;
+  }[] = [];
   for (const listen of listens) {
     let item;
     if (key === "track_name") {
@@ -85,10 +90,13 @@ export const countItems = async (
       item = listen.track_metadata[key];
     }
     const existingIndex = results.findIndex((entry) => entry.name === item);
-
     if (existingIndex !== -1) {
       // Item already exists, increase count
       results[existingIndex].count++;
+      results[existingIndex].lastPlayed = Math.max(
+        new Date(results[existingIndex].lastPlayed) || new Date(0),
+        new Date(listen.listened_at * 1000),
+      );
     } else {
       let url;
       switch (key) {
@@ -108,11 +116,16 @@ export const countItems = async (
       }
       // New item, add to results with count 1
 
-      results.push({ name: item, url, count: 1 });
+      results.push({
+        name: item,
+        url,
+        count: 1,
+        lastPlayed: new Date(listen.listened_at * 1000),
+      });
     }
   }
 
-  return results;
+  return results.sort((a, b) => b.count - a.count);
 };
 
 export const getListOfArtists = async () => {
