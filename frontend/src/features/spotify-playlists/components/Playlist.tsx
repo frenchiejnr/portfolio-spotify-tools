@@ -55,7 +55,7 @@ const Playlist = () => {
       return playlist.tracks?.items || [];
     } else {
       return (playlist.tracks?.items || []).filter(
-        (track) => !songCounts[track.track.id],
+        (track) => track.track && !songCounts[track.track.id],
       );
     }
   }, [[playlist.tracks?.items, songCounts, showUnplayedOnly]]);
