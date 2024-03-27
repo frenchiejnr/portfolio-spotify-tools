@@ -1,7 +1,8 @@
 import Pagination from "@/components/Pagination";
-import { getData } from "@/utils/indexDB";
+import { getData, setData as setDBData } from "@/utils/indexDB";
 import { useEffect, useState } from "react";
 import { ListenComponent } from "./Listen";
+import { Listen } from "../types";
 
 export const RecentListens = ({ refresh }: { refresh: boolean }) => {
   const [data, setData] = useState([]);
@@ -11,8 +12,20 @@ export const RecentListens = ({ refresh }: { refresh: boolean }) => {
     const fetchData = async () => {
       console.log(`refreshing recent listens`);
       setIsLoading(true);
-      const response = await getData("listens");
-      setData(() => response);
+      let response: Listen[] = await getData("listens");
+      response.sort((a, b) => b.listened_at - a.listened_at);
+
+      const filteredResponse = response.filter((item, index) => {
+        const existingIndex = response.findIndex(
+          (d) =>
+            d.listened_at === item.listened_at &&
+            d.track_metadata.track_name === item.track_metadata.track_name,
+        );
+        // Return true only if the current item's index is the same as the first occurrence index
+        return index === existingIndex;
+      });
+      await setDBData("listens", filteredResponse);
+      setData(() => filteredResponse);
       setIsLoading(false);
     };
     fetchData();

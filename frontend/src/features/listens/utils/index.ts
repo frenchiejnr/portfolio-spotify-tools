@@ -79,17 +79,32 @@ export const countItems = async (
   const results: {
     name: string;
     url: string;
+    id: string;
     count: number;
     lastPlayed: Date | null;
   }[] = [];
   for (const listen of listens) {
-    let item;
-    if (key === "track_name") {
-      item = `${listen.track_metadata["track_name"]}-${listen.track_metadata["release_name"]}`;
-    } else {
-      item = listen.track_metadata[key];
+    let itemName = listen.track_metadata[key];
+    let itemId;
+    switch (key) {
+      case "artist_name":
+        itemId = listen.track_metadata.additional_info.spotify_artist_ids?.[0];
+        break;
+      case "release_name":
+        itemId = listen.track_metadata.additional_info.spotify_album_id;
+        break;
+      case "track_name":
+        itemId = listen.track_metadata.additional_info.spotify_id;
+        break;
+
+      default:
+        itemId = "";
+        break;
     }
-    const existingIndex = results.findIndex((entry) => entry.name === item);
+    if (!itemId) {
+      itemName = "Unknown";
+    }
+    const existingIndex = results.findIndex((entry) => entry.id === itemId);
     if (existingIndex !== -1) {
       // Item already exists, increase count
       results[existingIndex].count++;
@@ -107,17 +122,19 @@ export const countItems = async (
           url = listen.track_metadata.additional_info.spotify_album_id;
           break;
         case "track_name":
-          url = listen.track_metadata.additional_info.origin_url;
+          url = listen.track_metadata.additional_info.spotify_id;
           break;
 
         default:
           url = "";
+
           break;
       }
       // New item, add to results with count 1
 
       results.push({
-        name: item,
+        name: itemName,
+        id: itemId,
         url,
         count: 1,
         lastPlayed: new Date(listen.listened_at * 1000),
