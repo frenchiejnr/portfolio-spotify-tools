@@ -1,48 +1,30 @@
-import { spotify } from "@/lib/spotify";
 import { Link } from "react-router-dom";
+import { UnplayedTracksCount } from "./UnplayedTracksCount";
+import { CreateUnplayedPlaylistButton } from "./CreateUnplayedPlaylistButton";
 
-export const PlaylistHeader: React.FC<{
+type PlaylistHeaderProps = React.FC<{
   filteredTracks: SpotifyApi.PlaylistTrackObject[];
   isLoading: boolean;
   playlist: SpotifyApi.PlaylistObjectFull;
   setShowUnplayedOnly: React.Dispatch<React.SetStateAction<boolean>>;
   showUnplayedOnly: boolean;
-}> = ({
+}>;
+
+export const PlaylistHeader: PlaylistHeaderProps = ({
   filteredTracks,
   isLoading,
   playlist,
   setShowUnplayedOnly,
   showUnplayedOnly,
 }) => {
-  const handleCreateUnplayedPlaylist = async () => {
-    const response: SpotifyApi.UserObjectPrivate = await spotify.get("/me");
-    const userId = response.id;
-    const newPlaylist = await spotify.post(`/users/${userId}/playlists`, {
-      name: `${playlist.name} Unplayed Tracks`,
-    });
-    console.log(filteredTracks);
-    const totalTracks = filteredTracks.length;
-
-    const trackBatches = [];
-
-    for (let i = 0; i < totalTracks; i += 100) {
-      trackBatches.push(filteredTracks.slice(i, i + 100));
-    }
-    for (const batch of trackBatches) {
-      const trackUris = batch.map((track) => track.track?.uri);
-      await spotify.post(`/playlists/${newPlaylist.id}/tracks`, {
-        uris: trackUris,
-      });
-    }
-  };
-
   return (
     <>
       <div>{playlist.name}</div>
       {showUnplayedOnly ? (
-        <div>
-          {filteredTracks.length} of {playlist.tracks.total} tracks unplayed
-        </div>
+        <UnplayedTracksCount
+          filteredTracks={filteredTracks}
+          playlist={playlist}
+        />
       ) : (
         <div>{filteredTracks.length} tracks</div>
       )}
@@ -62,9 +44,10 @@ export const PlaylistHeader: React.FC<{
         Show Unplayed Songs only
       </label>
       {showUnplayedOnly && (
-        <button onClick={handleCreateUnplayedPlaylist}>
-          Create Playlist of unplayed tracks
-        </button>
+        <CreateUnplayedPlaylistButton
+          playlist={playlist}
+          filteredTracks={filteredTracks}
+        />
       )}
     </>
   );
