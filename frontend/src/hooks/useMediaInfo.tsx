@@ -1,12 +1,12 @@
+import { checkForValidAccessToken } from "@/features/auth/api/checkForValidAccessToken";
 import { spotify } from "@/lib/spotify";
-import { MediaItem } from "@/types";
 import { useEffect, useState } from "react";
 
-export const useMediaInfo = <T extends MediaItem>(
+export const useMediaInfo = (
   id: string,
   mediaType: "track" | "album" | "artist",
 ) => {
-  const [mediaInfo, setMediaInfo] = useState<T | null>(null);
+  const [mediaInfo, setMediaInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -18,8 +18,11 @@ export const useMediaInfo = <T extends MediaItem>(
           : mediaType === "album"
             ? `/albums/${id}`
             : `/artists/${id}`;
-      const response: T = await spotify.get(endpoint);
-      setMediaInfo(response);
+      const isTokenValid = await checkForValidAccessToken();
+      if (isTokenValid) {
+        const response = await spotify.get(endpoint);
+        setMediaInfo(response);
+      }
       setIsLoading(false);
     };
     fetchMedia();

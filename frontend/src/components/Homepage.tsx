@@ -57,6 +57,7 @@ function HomePage() {
     setIsFetchingListens(true);
     setRefresh(true);
     await checkForListens();
+    console.log(`Finished Refreshing Listens`);
     setIsFetchingListens(false);
     setRefresh(false);
   };
@@ -95,6 +96,10 @@ function HomePage() {
         if (listenWithId) {
           listen.track_metadata.additional_info.spotify_id =
             listenWithId.track_metadata.additional_info.spotify_id;
+          listen.track_metadata.additional_info.spotify_artist_ids =
+            listenWithId.track_metadata.additional_info.spotify_artist_ids;
+          listen.track_metadata.additional_info.spotify_album_id =
+            listenWithId.track_metadata.additional_info.spotify_album_id;
         }
       });
     console.log(

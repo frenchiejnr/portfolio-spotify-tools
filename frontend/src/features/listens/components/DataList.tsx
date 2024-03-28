@@ -32,7 +32,7 @@ export const DataList = ({
     } else {
       return data.sort((a, b) => b.count - a.count);
     }
-  }, [sortByLastPlayed]);
+  }, [, sortByLastPlayed]);
 
   return (
     <div>
@@ -42,7 +42,7 @@ export const DataList = ({
         <>
           <h1 className="text-xl font-bold my-2">{title} List</h1>
           <p className="text-lg font-semibold mb-1">
-            Total {title} - {sortedData.length}
+            Total {title} - {data.length}
           </p>
           <label htmlFor="lastPlayed">
             <input
@@ -54,7 +54,7 @@ export const DataList = ({
             Sort by Last Played
           </label>
           <Pagination
-            totalCount={sortedData.length}
+            totalCount={data.length}
             pageSize={10}
             data={data}
             ItemComponent={ListComponent}
