@@ -38,7 +38,6 @@ export const fetchListens = async (fresh = false, timeStamp?: number) => {
     listens.push(listen);
   }
   let payload_count = response.payload.count;
-  setData("listens", listens);
   while (payload_count === 1000) {
     let nextTs: number;
     if (fresh) {
@@ -141,8 +140,9 @@ export const countItems = async (
       });
     }
   }
-
-  return results.sort((a, b) => b.count - a.count);
+  return results
+    .filter((item) => item.name !== "Unknown")
+    .sort((a, b) => b.count - a.count);
 };
 
 export const getListOfArtists = async () => {
