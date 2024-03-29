@@ -73,39 +73,81 @@ function HomePage() {
 
   const handleListensWithoutId = async () => {
     const listens: Listen[] = await getData("listens");
+    console.log(
+      listens[listens.length - 10].track_metadata.additional_info.spotify_id,
+    );
+    console.log(
+      listens.filter(
+        (listen) => !listen.track_metadata.additional_info.spotify_id,
+      ).length,
+    );
+    console.time();
+
+    const groupListensByMetadata = async (listens: Listen[]) => {
+      const groupedListens = new Map();
+      listens.forEach((listen) => {
+        const key = `
+        ${listen.track_metadata.track_name}-
+        ${listen.track_metadata.artist_name}-
+        ${listen.track_metadata.release_name}
+        `;
+
+        if (!groupedListens.has(key)) {
+          groupedListens.set(key, {
+            listen,
+            newestListenedAt: listen.listened_at,
+          });
+        } else {
+          const existingListen = groupedListens.get(key);
+          if (listen.listened_at > existingListen.newestListenedAt) {
+            groupedListens.set(key, {
+              listen,
+              newestListenedAt: listen.listened_at,
+            });
+          }
+        }
+      });
+      return groupedListens;
+    };
+
+    const updateSpotifyIds = async (
+      listens: Listen[],
+      groupedListens: Map<string, { listen: Listen; newestListenedAt: number }>,
+    ) => {
+      listens.forEach((listen) => {
+        const key = `
+        ${listen.track_metadata.track_name}-
+        ${listen.track_metadata.artist_name}-
+        ${listen.track_metadata.release_name}
+        `;
+        const groupInfo = groupedListens.get(key);
+        if (groupInfo) {
+          listen.track_metadata.additional_info = {
+            ...listen.track_metadata.additional_info,
+            spotify_id:
+              groupInfo.listen.track_metadata.additional_info.spotify_id,
+            spotify_artist_ids:
+              groupInfo.listen.track_metadata.additional_info
+                .spotify_artist_ids,
+            spotify_album_id:
+              groupInfo.listen.track_metadata.additional_info.spotify_album_id,
+          };
+        }
+      });
+    };
+    const groupedListens = await groupListensByMetadata(listens);
+
+    await updateSpotifyIds(listens, groupedListens);
+
+    console.timeEnd();
 
     console.log(
       listens.filter(
         (listen) => !listen.track_metadata.additional_info.spotify_id,
       ).length,
     );
-    listens
-      .filter((listen) => !listen.track_metadata.additional_info.spotify_id)
-      .forEach((listen: Listen) => {
-        const listenWithId = listens.find(
-          (item: Listen) =>
-            item.track_metadata.track_name ===
-              listen.track_metadata.track_name &&
-            item.track_metadata.release_name ===
-              listen.track_metadata.release_name &&
-            item.track_metadata.artist_name ===
-              listen.track_metadata.artist_name &&
-            item.track_metadata.additional_info.spotify_id,
-        );
-
-        if (listenWithId) {
-          listen.track_metadata.additional_info.spotify_id =
-            listenWithId.track_metadata.additional_info.spotify_id;
-          listen.track_metadata.additional_info.spotify_artist_ids =
-            listenWithId.track_metadata.additional_info.spotify_artist_ids;
-          listen.track_metadata.additional_info.spotify_album_id =
-            listenWithId.track_metadata.additional_info.spotify_album_id;
-        }
-      });
     console.log(
-      listens.filter(
-        (listen) => !listen.track_metadata.additional_info.spotify_id,
-      ).length,
+      listens[listens.length - 10].track_metadata.additional_info.spotify_id,
     );
     setData("listens", listens);
   };

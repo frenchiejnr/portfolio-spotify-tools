@@ -75,13 +75,7 @@ export const countItems = async (
   listens: Listen[] = [],
   key: "artist_name" | "release_name" | "track_name",
 ) => {
-  const results: {
-    name: string;
-    url: string;
-    id: string;
-    count: number;
-    lastPlayed: Date | null;
-  }[] = [];
+  const results = new Map();
   for (const listen of listens) {
     let itemName = listen.track_metadata[key];
     let itemId;
@@ -95,20 +89,20 @@ export const countItems = async (
       case "track_name":
         itemId = listen.track_metadata.additional_info.spotify_id;
         break;
-
       default:
         itemId = "";
         break;
     }
+
     if (!itemId) {
       itemName = "Unknown";
     }
-    const existingIndex = results.findIndex((entry) => entry.id === itemId);
-    if (existingIndex !== -1) {
-      // Item already exists, increase count
-      results[existingIndex].count++;
-      results[existingIndex].lastPlayed = Math.max(
-        new Date(results[existingIndex].lastPlayed) || new Date(0),
+
+    const existingEntry = results.get(itemId);
+    if (existingEntry) {
+      existingEntry.count++;
+      existingEntry.lastPlayed = Math.max(
+        new Date(existingEntry.lastPlayed) || new Date(0),
         new Date(listen.listened_at * 1000),
       );
     } else {
@@ -123,15 +117,12 @@ export const countItems = async (
         case "track_name":
           url = listen.track_metadata.additional_info.spotify_id;
           break;
-
         default:
           url = "";
-
           break;
       }
-      // New item, add to results with count 1
 
-      results.push({
+      results.set(itemId, {
         name: itemName,
         id: itemId,
         url,
@@ -140,7 +131,8 @@ export const countItems = async (
       });
     }
   }
-  return results
+
+  return Array.from(results.values()) // Get the values (objects) from the Map
     .filter((item) => item.name !== "Unknown")
     .sort((a, b) => b.count - a.count);
 };
