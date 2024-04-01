@@ -4,6 +4,8 @@ export interface Listen {
   recording_msid: string;
   track_metadata: {
     additional_info: {
+      spotify_album_id: string;
+      spotify_artist_ids: any;
       listening_from: string;
       release_mbid: string;
       artist_mbids: string[];
