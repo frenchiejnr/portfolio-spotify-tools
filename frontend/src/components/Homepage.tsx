@@ -74,9 +74,6 @@ function HomePage() {
   const handleListensWithoutId = async () => {
     const listens: Listen[] = await getData("listens");
     console.log(
-      listens[listens.length - 10].track_metadata.additional_info.spotify_id,
-    );
-    console.log(
       listens.filter(
         (listen) => !listen.track_metadata.additional_info.spotify_id,
       ).length,
@@ -145,9 +142,6 @@ function HomePage() {
       listens.filter(
         (listen) => !listen.track_metadata.additional_info.spotify_id,
       ).length,
-    );
-    console.log(
-      listens[listens.length - 10].track_metadata.additional_info.spotify_id,
     );
     setData("listens", listens);
   };

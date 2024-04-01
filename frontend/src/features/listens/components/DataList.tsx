@@ -26,7 +26,7 @@ export const DataList = ({
     fetchData();
   }, [, refresh]);
 
-  const sortedData = useMemo(() => {
+  useMemo(() => {
     if (sortByLastPlayed) {
       return data.sort((a, b) => b.lastPlayed - a.lastPlayed);
     } else {
