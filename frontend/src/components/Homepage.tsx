@@ -27,6 +27,7 @@ function HomePage() {
   const { data, isLoading, dataLength } = useRecentListens(
     "listens",
     (a, b) => b.listened_at - a.listened_at,
+    refresh,
   );
 
   useEffect(() => {
@@ -56,6 +57,7 @@ function HomePage() {
   useEffect(() => {
     getListens();
   }, []);
+
   const getListens = async () => {
     if (isFetchingListens) {
       return;

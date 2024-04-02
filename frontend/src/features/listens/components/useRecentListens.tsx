@@ -12,6 +12,7 @@ export type DataItem<T> = T;
 export const useRecentListens = <T extends RecentListen>(
   dataKey: string,
   sortFn: (a: T, b: T) => number,
+  refresh?: boolean,
 ) => {
   const [data, setData] = useState<DataItem<T>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,27 +20,29 @@ export const useRecentListens = <T extends RecentListen>(
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(`refreshing ${dataKey} data`);
-      setIsLoading(true);
-      let response: DataItem<T>[] = await getData(dataKey);
-      response.sort(sortFn);
+      if (refresh === undefined || refresh === true) {
+        console.log(`refreshing ${dataKey} data`);
+        setIsLoading(true);
+        let response: DataItem<T>[] = await getData(dataKey);
+        response.sort(sortFn);
 
-      const filteredResponse: DataItem<T>[] = [];
-      const uniqueListens = new Set();
-      for (const item of response) {
-        const itemKey = `${item.listened_at}-${item.track_metadata?.track_name || item.name}`;
-        if (!uniqueListens.has(itemKey)) {
-          uniqueListens.add(itemKey);
-          filteredResponse.push(item);
+        const filteredResponse: DataItem<T>[] = [];
+        const uniqueListens = new Set();
+        for (const item of response) {
+          const itemKey = `${item.listened_at}-${item.track_metadata?.track_name}`;
+          if (!uniqueListens.has(itemKey)) {
+            uniqueListens.add(itemKey);
+            filteredResponse.push(item);
+          }
         }
+        await setDBData("listens", filteredResponse);
+        setData(filteredResponse);
+        setDataLength(filteredResponse.length);
+        setIsLoading(false);
       }
-      await setDBData("listens", filteredResponse);
-      setData(filteredResponse);
-      setDataLength(filteredResponse.length);
-      setIsLoading(false);
     };
     fetchData();
-  }, [dataKey]);
+  }, [dataKey, refresh]);
 
   return { data, isLoading, dataLength };
 };
