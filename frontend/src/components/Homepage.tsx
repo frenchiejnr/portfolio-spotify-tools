@@ -13,15 +13,21 @@ import {
   getListOfTracks,
 } from "@/features/listens/utils";
 import { AccessTokenButton } from "@/features/auth/components/AccessTokenButton";
-import { RecentListens } from "@/features/listens/components/RecentListens";
+import { useRecentListens } from "@/features/listens/components/useRecentListens";
 import { Link } from "react-router-dom";
 import { Listen } from "@/features/listens/types";
 import { getData, setData } from "@/utils/indexDB";
+import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
+import { ListenComponent } from "@/features/listens/components/Listen";
 
 function HomePage() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [validToken, setValidToken] = useState(false);
+  const { data, isLoading, dataLength } = useRecentListens(
+    "listens",
+    (a, b) => b.listened_at - a.listened_at,
+  );
 
   useEffect(() => {
     const retrieveSpotifyToken = async () => {
@@ -171,7 +177,14 @@ function HomePage() {
         <h1>Fetching Listens - Fetched x listens</h1>
       ) : (
         <>
-          <RecentListens refresh={refresh} />
+          <RecentListensDisplay
+            data={data}
+            isLoading={isLoading}
+            dataLength={dataLength}
+            ItemComponent={ListenComponent}
+            title={"Recent Listens"}
+            totalLabel={"Listens"}
+          />
         </>
       )}
     </>

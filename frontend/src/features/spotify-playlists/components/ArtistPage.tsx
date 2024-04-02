@@ -7,89 +7,54 @@ import { spotify } from "@/lib/spotify";
 import { useEffect, useState } from "react";
 import { CountComponent } from "@/features/listens/components/CountComponent";
 import { countItems } from "@/features/listens/utils";
+import ArtistInfo from "./ArtistInfo";
+import ArtistSortDropdown from "./ArtistSortDropdown";
+import ArtistTracks from "./ArtistTracks";
+import { useRecentListens } from "@/features/listens/components/useRecentListens";
+import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
 
 export const ArtistPage = () => {
   const { artistId } = useParams();
-
-  const { mediaInfo, isLoading } = useMediaInfo(artistId!, "artist");
   const songPlays = useMediaPlays(artistId!, "artist");
-  const [artistTracks, setArtistTracks] = useState([]);
+  const [sortMethod, setSortMethod] = useState("by-count");
   const [songCounts, setSongCounts] = useState([]);
+  const { data, dataLength, isLoading } = useRecentListens(
+    "listens",
+    (a, b) => b.listened_at - a.listened_at,
+  );
 
   useEffect(() => {
     const getSongCounts = async () => {
       const counts = await countItems(songPlays, "track_name");
       setSongCounts(counts);
-
-      artistTracks.sort((trackA, trackB) => {
-        // Use songCounts to determine the count for each track
-        const countA =
-          counts.find((count) => count.id === trackA.external_urls.spotify)
-            ?.count || 0;
-        const countB =
-          counts.find((count) => count.id === trackB.external_urls.spotify)
-            ?.count || 0;
-
-        return countB - countA; // Sort in descending order
-      });
-
-      // Sort alphabetically by track name
-      // const sortedTracks = artistTracks.sort((trackA, trackB) => {
-      //   return trackA.name.localeCompare(trackB.name);
-      // });
-      // const sortedByTrackNumber = artistTracks.sort((a, b) => {
-      //   return a.track_number - b.track_number;
-      // });
-      console.log(artistTracks);
-
-      setArtistTracks(artistTracks);
     };
     getSongCounts();
-  }, [artistTracks]);
+  }, [songPlays]);
 
-  useEffect(() => {
-    const getAllArtistTracks = async () => {
-      const artistAlbums: SpotifyApi.ArtistsAlbumsResponse = await spotify.get(
-        `artists/${artistId}/albums?limit=50`,
-      );
-      const allTracks: SpotifyApi.TrackObjectSimplified[] = [];
+  const handleSortChange = (event) => {
+    setSortMethod(event.target.value);
+  };
 
-      for (const album of artistAlbums.items) {
-        const albumTracks: SpotifyApi.AlbumTracksResponse = await spotify.get(
-          `/albums/${album.id}/tracks`,
-        );
-        allTracks.push(...albumTracks.items);
-      }
-
-      setArtistTracks(allTracks);
-    };
-    getAllArtistTracks();
-  }, []);
   return (
     <>
-      {isLoading ? (
-        <div>Loading</div>
-      ) : (
-        <>
-          <div>
-            {mediaInfo?.name} - {songPlays?.length} Plays
-          </div>
-          <Pagination
-            totalCount={artistTracks.length}
-            pageSize={10}
-            data={artistTracks} // Use the sortedTracks directly
-            ItemComponent={CountComponent}
-            songCounts={songCounts}
-          />
-          <div>Recent Listens</div>
-          <Pagination
-            totalCount={songPlays?.length}
-            pageSize={10}
-            data={songPlays}
-            ItemComponent={ListenComponent}
-          />
-        </>
-      )}
+      <ArtistInfo />
+      <ArtistSortDropdown
+        sortMethod={sortMethod}
+        handleSortChange={handleSortChange}
+      />
+      <ArtistTracks
+        sortMethod={sortMethod}
+        songCounts={songCounts}
+        artistId={artistId}
+      />
+      <RecentListensDisplay
+        data={songPlays}
+        isLoading={isLoading}
+        dataLength={songPlays.length}
+        ItemComponent={ListenComponent}
+        title={"Recent Listens"}
+        totalLabel={"Listens"}
+      />
     </>
   );
 };
