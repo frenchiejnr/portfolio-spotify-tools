@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { spotify } from "@/lib/spotify";
 import { useEffect, useState } from "react";
 import { CountComponent } from "@/features/listens/components/CountComponent";
-import { getListOfTracks } from "@/features/listens/utils";
+import { countItems } from "@/features/listens/utils";
 
 export const ArtistPage = () => {
   const { artistId } = useParams();
@@ -18,11 +18,34 @@ export const ArtistPage = () => {
 
   useEffect(() => {
     const getSongCounts = async () => {
-      const counts = await getListOfTracks();
+      const counts = await countItems(songPlays, "track_name");
       setSongCounts(counts);
+
+      artistTracks.sort((trackA, trackB) => {
+        // Use songCounts to determine the count for each track
+        const countA =
+          counts.find((count) => count.id === trackA.external_urls.spotify)
+            ?.count || 0;
+        const countB =
+          counts.find((count) => count.id === trackB.external_urls.spotify)
+            ?.count || 0;
+
+        return countB - countA; // Sort in descending order
+      });
+
+      // Sort alphabetically by track name
+      // const sortedTracks = artistTracks.sort((trackA, trackB) => {
+      //   return trackA.name.localeCompare(trackB.name);
+      // });
+      // const sortedByTrackNumber = artistTracks.sort((a, b) => {
+      //   return a.track_number - b.track_number;
+      // });
+      console.log(artistTracks);
+
+      setArtistTracks(artistTracks);
     };
     getSongCounts();
-  }, []);
+  }, [artistTracks]);
 
   useEffect(() => {
     const getAllArtistTracks = async () => {
@@ -38,16 +61,10 @@ export const ArtistPage = () => {
         allTracks.push(...albumTracks.items);
       }
 
-      // Sort alphabetically by track name
-      const sortedTracks = allTracks.sort((trackA, trackB) => {
-        return trackA.name.localeCompare(trackB.name);
-      });
-
-      setArtistTracks(sortedTracks);
+      setArtistTracks(allTracks);
     };
     getAllArtistTracks();
   }, []);
-
   return (
     <>
       {isLoading ? (
