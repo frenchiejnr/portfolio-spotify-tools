@@ -3,8 +3,8 @@ import { useMediaPlays } from "@/hooks/useMediaPlays";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { countItems } from "@/features/listens/utils";
-import ArtistInfo from "./ArtistInfo";
-import ArtistSortDropdown from "./ArtistSortDropdown";
+import MediaInfo from "./ArtistInfo";
+import MediaSortDropdown from "./MediaSortDropdown";
 import ArtistTracks from "./ArtistTracks";
 import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
 import { MediaItemWithCount } from "@/features/listens/types";
@@ -29,8 +29,8 @@ export const ArtistPage = () => {
 
   return (
     <>
-      <ArtistInfo />
-      <ArtistSortDropdown
+      <MediaInfo id={artistId!} mediaType={"artist"} />
+      <MediaSortDropdown
         sortMethod={sortMethod}
         handleSortChange={handleSortChange}
       />

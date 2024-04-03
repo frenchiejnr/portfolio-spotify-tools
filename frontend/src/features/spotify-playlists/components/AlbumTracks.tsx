@@ -13,7 +13,9 @@ const AlbumTracks = ({
   songCounts: MediaItemWithCount[];
   albumId: string;
 }) => {
-  const [albumTracks, setAlbumTracks] = useState<SpotifyApi.A[]>([]);
+  const [albumTracks, setAlbumTracks] = useState<
+    SpotifyApi.TrackObjectSimplified[]
+  >([]);
   const [nextPageUrl, setNextPageUrl] = useState<string | null>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,28 +37,15 @@ const AlbumTracks = ({
     const fetchMore = async () => {
       if (nextPageUrl && !isLoading) {
         setIsLoading(true);
-        const fetchNextTracks = async (object, url?: string) => {
-          if (!url) {
-            return;
-          }
-          const newTracks: SpotifyApi.AlbumTracksResponse =
-            await spotify.get(url);
-          object.push(...newTracks.items);
-          object.next = newTracks.next;
-          return object;
-        };
-        const newTracks = await fetchNextTracks(
-          albumTracks,
-          nextPageUrl.split("/v1/")[1],
-        );
-        setAlbumTracks(newTracks.filter((item) => item !== null));
+        const newTracks = await spotify.get(nextPageUrl.split("/v1/")[1]);
+        setAlbumTracks((prevTracks) => [...prevTracks, ...newTracks.items]);
         setNextPageUrl(newTracks.next);
         setIsLoading(false);
       }
     };
-    fetchMore();
-  }, [nextPageUrl, isLoading, albumTracks]);
 
+    fetchMore();
+  }, [nextPageUrl, isLoading]);
   const sortTracks = (data: SpotifyApi.TrackObjectSimplified[]) => {
     switch (sortMethod) {
       case "by-count":

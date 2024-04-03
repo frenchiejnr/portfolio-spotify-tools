@@ -2,10 +2,15 @@ import { useMediaInfo } from "@/hooks/useMediaInfo";
 import { useMediaPlays } from "@/hooks/useMediaPlays";
 import { useParams } from "react-router-dom";
 
-const ArtistInfo = () => {
-  const { artistId } = useParams();
-  const { mediaInfo, isLoading } = useMediaInfo(artistId!, "artist");
-  const songPlays = useMediaPlays(artistId!, "artist");
+const MediaInfo = ({
+  id,
+  mediaType,
+}: {
+  id: string;
+  mediaType: "track" | "album" | "artist";
+}) => {
+  const { mediaInfo, isLoading } = useMediaInfo(id, mediaType);
+  const songPlays = useMediaPlays(id, mediaType);
 
   return (
     <>
@@ -22,4 +27,4 @@ const ArtistInfo = () => {
   );
 };
 
-export default ArtistInfo;
+export default MediaInfo;

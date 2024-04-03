@@ -1,4 +1,4 @@
-const ArtistSortDropdown = ({
+const MediaSortDropdown = ({
   sortMethod,
   handleSortChange,
 }: {
@@ -12,4 +12,4 @@ const ArtistSortDropdown = ({
   </select>
 );
 
-export default ArtistSortDropdown;
+export default MediaSortDropdown;
