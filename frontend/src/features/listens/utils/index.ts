@@ -1,7 +1,7 @@
 import { listenBrainz } from "@/lib/listenBrainz";
 import { getData, setData } from "@/utils/indexDB";
 import storage from "@/utils/storage";
-import { Listen, Recent_Listens_Payload } from "../types";
+import { Listen, Recent_Listens_Payload, MediaItemWithCount } from "../types";
 
 export const listens: any = [];
 
@@ -74,11 +74,11 @@ export const checkForListens = async () => {
 export const countItems = async (
   listens: Listen[] = [],
   key: "artist_name" | "release_name" | "track_name",
-) => {
+): Promise<MediaItemWithCount[]> => {
   const results = new Map();
   for (const listen of listens) {
     let itemName = listen.track_metadata[key];
-    let itemId;
+    let itemId: string;
     switch (key) {
       case "artist_name":
         itemId = listen.track_metadata.additional_info.spotify_artist_ids?.[0];
@@ -101,9 +101,11 @@ export const countItems = async (
     const existingEntry = results.get(itemId);
     if (existingEntry) {
       existingEntry.count++;
-      existingEntry.lastPlayed = Math.max(
-        new Date(existingEntry.lastPlayed) || new Date(0),
-        new Date(listen.listened_at * 1000),
+      existingEntry.lastPlayed = new Date(
+        Math.max(
+          existingEntry.lastPlayed?.getTime() || 0,
+          listen.listened_at * 1000,
+        ),
       );
     } else {
       let url;
@@ -146,9 +148,32 @@ export const getListOfAlbums = async () => {
 export const getListOfTracks = async () => {
   return await countItems(await getData("listens"), "track_name");
 };
-export const getItemUrl = (item: any) => {
-  const regex = /\/(track|artist|album)\/([^/]+)/; // Matches "/track/" or "/artist/" followed by ID
-  const url = Array.isArray(item.url) ? item.url[0] : item.url;
-  const match = url?.match(regex);
+function getUrlFromItem(item: any, urlLocation: string): string | null {
+  // Check if the requested location exists in the item
+  const urlPath = urlLocation.split("."); // Split location into nested properties
+  let currentObject = item;
+
+  for (const property of urlPath) {
+    if (!currentObject.hasOwnProperty(property)) {
+      return null; // Location not found
+    }
+    currentObject = currentObject[property];
+  }
+
+  // Handle potential array structure (assuming the last property might be an array)
+  return Array.isArray(currentObject) ? currentObject[0] : currentObject;
+}
+
+export const getItemUrl = (item: any, urlLocation = "url") => {
+  // Leverage getUrlFromItem to handle location and potential nesting
+  const url = getUrlFromItem(item, urlLocation);
+
+  // Check if URL was found
+  if (!url) {
+    return null;
+  }
+
+  // Apply the original URL extraction logic using the regex
+  const match = url.match(/\/(track|artist|album)\/([^/]+)/);
   return match;
 };

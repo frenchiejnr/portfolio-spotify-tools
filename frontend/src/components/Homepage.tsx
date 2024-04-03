@@ -13,15 +13,22 @@ import {
   getListOfTracks,
 } from "@/features/listens/utils";
 import { AccessTokenButton } from "@/features/auth/components/AccessTokenButton";
-import { RecentListens } from "@/features/listens/components/RecentListens";
+import { useRecentListens } from "@/features/listens/components/useRecentListens";
 import { Link } from "react-router-dom";
 import { Listen } from "@/features/listens/types";
 import { getData, setData } from "@/utils/indexDB";
+import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
+import { ListenComponent } from "@/features/listens/components/Listen";
 
 function HomePage() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [validToken, setValidToken] = useState(false);
+  const { data, dataLength } = useRecentListens(
+    "listens",
+    (a, b) => b.listened_at - a.listened_at,
+    refresh,
+  );
 
   useEffect(() => {
     const retrieveSpotifyToken = async () => {
@@ -50,6 +57,7 @@ function HomePage() {
   useEffect(() => {
     getListens();
   }, []);
+
   const getListens = async () => {
     if (isFetchingListens) {
       return;
@@ -73,9 +81,6 @@ function HomePage() {
 
   const handleListensWithoutId = async () => {
     const listens: Listen[] = await getData("listens");
-    console.log(
-      listens[listens.length - 10].track_metadata.additional_info.spotify_id,
-    );
     console.log(
       listens.filter(
         (listen) => !listen.track_metadata.additional_info.spotify_id,
@@ -146,9 +151,6 @@ function HomePage() {
         (listen) => !listen.track_metadata.additional_info.spotify_id,
       ).length,
     );
-    console.log(
-      listens[listens.length - 10].track_metadata.additional_info.spotify_id,
-    );
     setData("listens", listens);
   };
 
@@ -177,7 +179,13 @@ function HomePage() {
         <h1>Fetching Listens - Fetched x listens</h1>
       ) : (
         <>
-          <RecentListens refresh={refresh} />
+          <RecentListensDisplay
+            data={data}
+            dataLength={dataLength}
+            ItemComponent={ListenComponent}
+            title={"Recent Listens"}
+            totalLabel={"Listens"}
+          />
         </>
       )}
     </>

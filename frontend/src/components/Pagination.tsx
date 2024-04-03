@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 
 interface PaginationProps {
   totalCount: number;
   pageSize: number;
   data: any[];
-  ItemComponent: React.FC<{ item: any }>;
+  ItemComponent: React.FC<{ item: any; songCounts?: any }>;
   songCounts?: {};
 }
 
@@ -31,13 +31,12 @@ const Pagination: React.FC<PaginationProps> = ({
     setTotalPages(Math.ceil(totalCount / pageSize));
     setCurrentPage(selectedPage.selected);
   };
-
   return (
     <div className="text-center">
       {subset.map((item) => {
-        item.id = uuidv4();
+        item.keyid = uuidv4();
         return (
-          <ItemComponent key={item.id} item={item} songCounts={songCounts} />
+          <ItemComponent key={item.keyid} item={item} songCounts={songCounts} />
         );
       })}
       <div className="flex justify-center mt-4">

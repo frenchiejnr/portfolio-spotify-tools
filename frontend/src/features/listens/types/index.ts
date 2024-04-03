@@ -4,6 +4,8 @@ export interface Listen {
   recording_msid: string;
   track_metadata: {
     additional_info: {
+      spotify_album_id: string;
+      spotify_artist_ids: any;
       listening_from: string;
       release_mbid: string;
       artist_mbids: string[];
@@ -35,3 +37,11 @@ export interface Recent_Listens_Payload {
     user_list: string;
   };
 }
+
+export type MediaItemWithCount = {
+  name: string;
+  id: string;
+  url: string;
+  count: number;
+  lastPlayed: Date;
+};
