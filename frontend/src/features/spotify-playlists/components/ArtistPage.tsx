@@ -49,7 +49,6 @@ export const ArtistPage = () => {
       />
       <RecentListensDisplay
         data={songPlays}
-        isLoading={isLoading}
         dataLength={songPlays.length}
         ItemComponent={ListenComponent}
         title={"Recent Listens"}

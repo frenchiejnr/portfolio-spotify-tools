@@ -24,7 +24,7 @@ function HomePage() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [validToken, setValidToken] = useState(false);
-  const { data, isLoading, dataLength } = useRecentListens(
+  const { data, dataLength } = useRecentListens(
     "listens",
     (a, b) => b.listened_at - a.listened_at,
     refresh,
@@ -181,7 +181,6 @@ function HomePage() {
         <>
           <RecentListensDisplay
             data={data}
-            isLoading={isLoading}
             dataLength={dataLength}
             ItemComponent={ListenComponent}
             title={"Recent Listens"}
