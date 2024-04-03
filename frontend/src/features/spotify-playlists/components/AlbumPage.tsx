@@ -8,8 +8,8 @@ import { useParams } from "react-router-dom";
 export const AlbumPage = () => {
   const { albumId } = useParams();
 
-  const { mediaInfo, isLoading } = useMediaInfo(albumId, "album");
-  const songPlays = useMediaPlays(albumId, "album");
+  const { mediaInfo, isLoading } = useMediaInfo(albumId!, "album");
+  const songPlays = useMediaPlays(albumId!, "album");
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { listenBrainz } from "@/lib/listenBrainz";
 import { getData, setData } from "@/utils/indexDB";
 import storage from "@/utils/storage";
-import { Listen, Recent_Listens_Payload } from "../types";
+import { Listen, Recent_Listens_Payload, MediaItemWithCount } from "../types";
 
 export const listens: any = [];
 
@@ -74,7 +74,7 @@ export const checkForListens = async () => {
 export const countItems = async (
   listens: Listen[] = [],
   key: "artist_name" | "release_name" | "track_name",
-) => {
+): Promise<MediaItemWithCount[]> => {
   const results = new Map();
   for (const listen of listens) {
     let itemName = listen.track_metadata[key];

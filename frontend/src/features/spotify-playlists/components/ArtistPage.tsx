@@ -1,27 +1,19 @@
-import Pagination from "@/components/Pagination";
 import { ListenComponent } from "@/features/listens/components/Listen";
 import { useMediaPlays } from "@/hooks/useMediaPlays";
-import { useMediaInfo } from "@/hooks/useMediaInfo";
 import { useParams } from "react-router-dom";
-import { spotify } from "@/lib/spotify";
-import { useEffect, useState } from "react";
-import { CountComponent } from "@/features/listens/components/CountComponent";
+import React, { useEffect, useState } from "react";
 import { countItems } from "@/features/listens/utils";
 import ArtistInfo from "./ArtistInfo";
 import ArtistSortDropdown from "./ArtistSortDropdown";
 import ArtistTracks from "./ArtistTracks";
-import { useRecentListens } from "@/features/listens/components/useRecentListens";
 import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
+import { MediaItemWithCount } from "@/features/listens/types";
 
 export const ArtistPage = () => {
   const { artistId } = useParams();
   const songPlays = useMediaPlays(artistId!, "artist");
   const [sortMethod, setSortMethod] = useState("by-count");
-  const [songCounts, setSongCounts] = useState([]);
-  const { data, dataLength, isLoading } = useRecentListens(
-    "listens",
-    (a, b) => b.listened_at - a.listened_at,
-  );
+  const [songCounts, setSongCounts] = useState<MediaItemWithCount[]>([]);
 
   useEffect(() => {
     const getSongCounts = async () => {
@@ -31,7 +23,7 @@ export const ArtistPage = () => {
     getSongCounts();
   }, [songPlays]);
 
-  const handleSortChange = (event) => {
+  const handleSortChange = (event: React.ChangeEvent<{ value: string }>) => {
     setSortMethod(event.target.value);
   };
 
@@ -45,7 +37,7 @@ export const ArtistPage = () => {
       <ArtistTracks
         sortMethod={sortMethod}
         songCounts={songCounts}
-        artistId={artistId}
+        artistId={artistId!}
       />
       <RecentListensDisplay
         data={songPlays}

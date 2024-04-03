@@ -37,3 +37,11 @@ export interface Recent_Listens_Payload {
     user_list: string;
   };
 }
+
+export type MediaItemWithCount = {
+  name: string;
+  id: string;
+  url: string;
+  count: number;
+  lastPlayed: Date;
+};
