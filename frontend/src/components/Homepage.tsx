@@ -12,7 +12,7 @@ import {
   getListOfArtists,
   getListOfTracks,
 } from "@/features/listens/utils";
-import { AccessTokenButton } from "@/features/auth/components/AccessTokenButton";
+import { LoginButton } from "@/features/auth/components/LoginButton";
 import { useRecentListens } from "@/features/listens/components/useRecentListens";
 import { Link } from "react-router-dom";
 import { Listen } from "@/features/listens/types";
@@ -156,37 +156,40 @@ function HomePage() {
 
   return (
     <>
-      <button disabled={isFetchingListens} onClick={getListens}>
-        Check For More Listens
-      </button>
-      <br />
       {validToken ? (
-        <Link to={"/playlists"}>Playlists</Link>
-      ) : (
-        <AccessTokenButton />
-      )}
-
-      <Link to={"/album"}>Albums</Link>
-      <Link to={"/artist"}>Artists</Link>
-      <Link to={"/track"}>Tracks</Link>
-      <button onClick={handleGetMe}>Get me</button>
-      <button type="button" onClick={handleGetRecentlyPlayed}>
-        Get recently played
-      </button>
-      <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
-      <button onClick={handleListensWithoutId}>Songs missing spotify Id</button>
-      {isFetchingListens ? (
-        <h1>Fetching Listens - Fetched x listens</h1>
-      ) : (
         <>
-          <RecentListensDisplay
-            data={data}
-            dataLength={dataLength}
-            ItemComponent={ListenComponent}
-            title={"Recent Listens"}
-            totalLabel={"Listens"}
-          />
+          <button disabled={isFetchingListens} onClick={getListens}>
+            Check For More Listens
+          </button>
+          <br />
+          <Link to={"/playlists"}>Playlists</Link>
+          <Link to={"/album"}>Albums</Link>
+          <Link to={"/artist"}>Artists</Link>
+          <Link to={"/track"}>Tracks</Link>
+          <button onClick={handleGetMe}>Get me</button>
+          <button type="button" onClick={handleGetRecentlyPlayed}>
+            Get recently played
+          </button>
+          <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
+          <button onClick={handleListensWithoutId}>
+            Songs missing spotify Id
+          </button>
+          {isFetchingListens ? (
+            <h1>Fetching Listens - Fetched x listens</h1>
+          ) : (
+            <>
+              <RecentListensDisplay
+                data={data}
+                dataLength={dataLength}
+                ItemComponent={ListenComponent}
+                title={"Recent Listens"}
+                totalLabel={"Listens"}
+              />
+            </>
+          )}
         </>
+      ) : (
+        <LoginButton />
       )}
     </>
   );

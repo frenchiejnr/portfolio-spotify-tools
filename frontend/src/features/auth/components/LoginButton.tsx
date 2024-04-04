@@ -4,7 +4,7 @@ import {
   requestUserAuthorization,
 } from "..";
 
-export const AccessTokenButton = () => {
+export const LoginButton = () => {
   return (
     <button
       onClick={async () => {
@@ -17,7 +17,7 @@ export const AccessTokenButton = () => {
         await getAccessToken(code!);
       }}
     >
-      Access Token Button
+      Login Button
     </button>
   );
 };
