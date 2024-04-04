@@ -189,7 +189,9 @@ function HomePage() {
           )}
         </>
       ) : (
-        <LoginButton />
+        <div className="flex justify-center content-center">
+          <LoginButton />
+        </div>
       )}
     </>
   );
