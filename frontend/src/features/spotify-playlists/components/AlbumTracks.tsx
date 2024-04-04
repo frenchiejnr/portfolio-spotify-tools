@@ -31,17 +31,18 @@ const AlbumTracks = ({
       setIsLoading(false);
     };
     getAllAlbumTracks();
-  }, []);
+  }, [albumId]);
 
   useEffect(() => {
     const fetchMore = async () => {
-      if (nextPageUrl && !isLoading) {
-        setIsLoading(true);
-        const newTracks = await spotify.get(nextPageUrl.split("/v1/")[1]);
-        setAlbumTracks((prevTracks) => [...prevTracks, ...newTracks.items]);
-        setNextPageUrl(newTracks.next);
-        setIsLoading(false);
+      if (!(nextPageUrl && !isLoading)) {
+        return;
       }
+      setIsLoading(true);
+      const newTracks = await spotify.get(nextPageUrl.split("/v1/")[1]);
+      setAlbumTracks((prevTracks) => [...prevTracks, ...newTracks.items]);
+      setNextPageUrl(newTracks.next);
+      setIsLoading(false);
     };
 
     fetchMore();

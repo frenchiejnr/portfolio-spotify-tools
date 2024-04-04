@@ -1,6 +1,5 @@
 import { useMediaInfo } from "@/hooks/useMediaInfo";
 import { useMediaPlays } from "@/hooks/useMediaPlays";
-import { useParams } from "react-router-dom";
 
 const MediaInfo = ({
   id,
@@ -17,11 +16,9 @@ const MediaInfo = ({
       {isLoading ? (
         <div>Loading</div>
       ) : (
-        <>
-          <div>
-            {mediaInfo?.name} - {songPlays?.length} Plays
-          </div>
-        </>
+        <div>
+          {mediaInfo?.name} - {songPlays?.length} Plays
+        </div>
       )}
     </>
   );
