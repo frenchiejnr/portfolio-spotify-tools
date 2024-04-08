@@ -10,7 +10,6 @@ export const TrackPage = () => {
 
   const { mediaInfo, isLoading } = useMediaInfo(trackId, "track");
   const songPlays = useMediaPlays(trackId, "track");
-  console.log(songPlays);
 
   return (
     <>
