@@ -177,3 +177,54 @@ export const getItemUrl = (item: any, urlLocation = "url") => {
   const match = url.match(/\/(track|artist|album)\/([^/]+)/);
   return match;
 };
+
+export const processListensWithoutId = async (listens: Listen[]) => {
+  const groupedListens = new Map();
+  listens.forEach((listen) => {
+    const key = `
+        ${listen.track_metadata.track_name}-
+        ${listen.track_metadata.artist_name}-
+        ${listen.track_metadata.release_name}
+        `;
+
+    if (!groupedListens.has(key)) {
+      groupedListens.set(key, {
+        listen,
+        newestListenedAt: listen.listened_at,
+      });
+    } else {
+      const existingListen = groupedListens.get(key);
+      if (listen.listened_at > existingListen.newestListenedAt) {
+        groupedListens.set(key, {
+          listen,
+          newestListenedAt: listen.listened_at,
+        });
+      }
+    }
+  });
+  return groupedListens;
+};
+
+export const processListensForMissingSpotifyIds = async (
+  listens: Listen[],
+  groupedListens: Map<string, { listen: Listen; newestListenedAt: number }>,
+) => {
+  listens.forEach((listen) => {
+    const key = `
+        ${listen.track_metadata.track_name}-
+        ${listen.track_metadata.artist_name}-
+        ${listen.track_metadata.release_name}
+        `;
+    const groupInfo = groupedListens.get(key);
+    if (groupInfo) {
+      listen.track_metadata.additional_info = {
+        ...listen.track_metadata.additional_info,
+        spotify_id: groupInfo.listen.track_metadata.additional_info.spotify_id,
+        spotify_artist_ids:
+          groupInfo.listen.track_metadata.additional_info.spotify_artist_ids,
+        spotify_album_id:
+          groupInfo.listen.track_metadata.additional_info.spotify_album_id,
+      };
+    }
+  });
+};
