@@ -1,20 +1,12 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 
 import storage from "@/utils/storage";
 import { checkTokenValidity, getAccessToken } from "@/features/auth";
 import { LoginButton } from "@/features/auth/components/LoginButton";
-import { useRecentListens } from "@/features/listens/components/useRecentListens";
-import { useListenData } from "@/hooks/useListenData";
 import { HomeContent } from "./HomeContent";
 
 function HomePage() {
   const [validToken, setValidToken] = useState(false);
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  const { isFetchingListens, getListens } = useListenData();
-  const { data, dataLength } = useRecentListens(
-    "listens",
-    (a, b) => b.listened_at - a.listened_at,
-  );
 
   useEffect(() => {
     const retrieveSpotifyToken = async () => {
@@ -42,13 +34,7 @@ function HomePage() {
   return (
     <>
       {validToken ? (
-        <HomeContent
-          data={data}
-          dataLength={dataLength}
-          forceUpdate={forceUpdate}
-          getListens={getListens}
-          isFetchingListens={isFetchingListens}
-        />
+        <HomeContent />
       ) : (
         <div className="flex justify-center content-center">
           <LoginButton />

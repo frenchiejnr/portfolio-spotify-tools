@@ -5,7 +5,7 @@ import {
 import { Link } from "react-router-dom";
 import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
 import { ListenComponent } from "@/features/listens/components/Listen";
-import { RecentListen } from "@/features/listens/components/useRecentListens";
+import { useRecentListens } from "@/features/listens/components/useRecentListens";
 import { Listen } from "@/features/listens/types";
 import {
   getListOfArtists,
@@ -15,14 +15,16 @@ import {
   processListensForMissingSpotifyIds,
 } from "@/features/listens/utils";
 import { getData, setData } from "@/utils/indexDB";
+import { useReducer } from "react";
+import { useListenData } from "@/hooks/useListenData";
 
-export const HomeContent: React.FC<{
-  data: RecentListen[];
-  dataLength: number;
-  forceUpdate: React.DispatchWithoutAction;
-  getListens: () => Promise<void>;
-  isFetchingListens: boolean;
-}> = ({ data, dataLength, forceUpdate, getListens, isFetchingListens }) => {
+export const HomeContent: React.FC<{}> = () => {
+  const { data, dataLength } = useRecentListens(
+    "listens",
+    (a, b) => b.listened_at - a.listened_at,
+  );
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+  const { isFetchingListens, getListens } = useListenData();
   const handleListenBrainz = async () => {
     let response = await getListOfArtists();
     console.log(response);

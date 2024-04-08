@@ -1,5 +1,6 @@
 import Pagination from "@/components/Pagination";
 import React from "react";
+import { Listen } from "../types";
 
 interface RecentListensProps<T> {
   data: T[];
@@ -8,7 +9,7 @@ interface RecentListensProps<T> {
   title: string;
   totalLabel: string;
 }
-export const RecentListensDisplay = (props: RecentListensProps<T>) => {
+export const RecentListensDisplay = (props: RecentListensProps<Listen>) => {
   const { data, dataLength, ItemComponent, title, totalLabel } = props;
 
   return (
