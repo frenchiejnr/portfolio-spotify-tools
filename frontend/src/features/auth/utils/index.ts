@@ -1,3 +1,5 @@
+import storage from "@/utils/storage";
+
 export const generateCodeVerifier = (): string => {
   const generateRandomString = (length: number) => {
     const possible =
@@ -28,4 +30,9 @@ export const generateCodeChallenge = async (verifier: string) => {
   const hashed = await sha256(verifier);
   const codeChallenge = base64encode(hashed);
   return codeChallenge;
+};
+
+export const checkTokenValidity = () => {
+  const existingToken = storage.getToken("spotify");
+  return existingToken && existingToken !== "Bearer undefined";
 };

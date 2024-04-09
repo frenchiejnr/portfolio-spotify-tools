@@ -177,3 +177,50 @@ export const getItemUrl = (item: any, urlLocation: string = "url") => {
   const url = getUrlFromItem(item, urlLocation);
   return url ? url.match(/\/(track|artist|album)\/([^/]+)/) : null;
 };
+
+export const processListensWithoutId = async (listens: Listen[]) => {
+  const groupedListens = new Map();
+  listens.forEach((listen) => {
+    const key = `
+        ${listen.track_metadata.track_name}-
+        ${listen.track_metadata.artist_name}-
+        ${listen.track_metadata.release_name}
+        `;
+
+    if (!groupedListens.has(key)) {
+      groupedListens.set(key, {
+        listen,
+        newestListenedAt: listen.listened_at,
+      });
+    } else {
+      const existingListen = groupedListens.get(key);
+      if (listen.listened_at > existingListen.newestListenedAt) {
+        groupedListens.set(key, {
+          listen,
+          newestListenedAt: listen.listened_at,
+        });
+      }
+    }
+  });
+  return groupedListens;
+};
+
+export const processListensForMissingSpotifyIds = async (
+  listens: Listen[],
+  groupedListens: Map<string, { listen: Listen; newestListenedAt: number }>,
+) => {
+  listens.forEach((listen) => {
+    const key = `
+        ${listen.track_metadata.track_name}-
+        ${listen.track_metadata.artist_name}-
+        ${listen.track_metadata.release_name}
+        `;
+    const groupInfo = groupedListens.get(key);
+    if (groupInfo) {
+      listen.track_metadata.additional_info = {
+        ...groupInfo.listen.track_metadata.additional_info,
+       
+      };
+    }
+  });
+};
