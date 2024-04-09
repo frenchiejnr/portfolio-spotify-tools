@@ -7,7 +7,15 @@ import MediaSortDropdown from "./MediaSortDropdown";
 import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
 import { ListenComponent } from "@/features/listens/components/Listen";
 
-export const MediaPage = ({ mediaId, mediaType, renderTracks }) => {
+export const MediaPage = ({
+  mediaId,
+  mediaType,
+  renderTracks,
+}: {
+  mediaId: string;
+  mediaType: "track" | "artist" | "album";
+  renderTracks: any;
+}) => {
   const songPlays = useMediaPlays(mediaId!, mediaType);
   const [sortMethod, setSortMethod] = useState("by-count");
   const [songCounts, setSongCounts] = useState<MediaItemWithCount[]>([]);

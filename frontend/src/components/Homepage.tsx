@@ -128,14 +128,7 @@ function HomePage() {
         const groupInfo = groupedListens.get(key);
         if (groupInfo) {
           listen.track_metadata.additional_info = {
-            ...listen.track_metadata.additional_info,
-            spotify_id:
-              groupInfo.listen.track_metadata.additional_info.spotify_id,
-            spotify_artist_ids:
-              groupInfo.listen.track_metadata.additional_info
-                .spotify_artist_ids,
-            spotify_album_id:
-              groupInfo.listen.track_metadata.additional_info.spotify_album_id,
+            ...groupInfo.listen.track_metadata.additional_info,
           };
         }
       });

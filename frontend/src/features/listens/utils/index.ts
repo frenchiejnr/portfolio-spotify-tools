@@ -148,32 +148,32 @@ export const getListOfAlbums = async () => {
 export const getListOfTracks = async () => {
   return await countItems(await getData("listens"), "track_name");
 };
-function getUrlFromItem(item: any, urlLocation: string): string | null {
-  // Check if the requested location exists in the item
-  const urlPath = urlLocation.split("."); // Split location into nested properties
+
+const getUrlFromItem = (item: any, urlLocation: string): string | null => {
+  // Split location into properties, handling potential index brackets
+  const urlPath = urlLocation.split(".");
   let currentObject = item;
 
   for (const property of urlPath) {
-    if (!currentObject.hasOwnProperty(property)) {
-      return null; // Location not found
+    const indexMatch = property.match(/\[(\d+)\]$/); // Check for index at the end
+    if (indexMatch) {
+      const index = Number(indexMatch[1]); // Extract the index
+      if (!Array.isArray(currentObject) || index >= currentObject.length) {
+        return null; // Invalid index or not an array
+      }
+      currentObject = currentObject[index];
+    } else {
+      if (!currentObject.hasOwnProperty(property)) {
+        return null; // Property not found
+      }
+      currentObject = currentObject[property];
     }
-    currentObject = currentObject[property];
   }
 
-  // Handle potential array structure (assuming the last property might be an array)
   return Array.isArray(currentObject) ? currentObject[0] : currentObject;
-}
+};
 
-export const getItemUrl = (item: any, urlLocation = "url") => {
-  // Leverage getUrlFromItem to handle location and potential nesting
+export const getItemUrl = (item: any, urlLocation: string = "url") => {
   const url = getUrlFromItem(item, urlLocation);
-
-  // Check if URL was found
-  if (!url) {
-    return null;
-  }
-
-  // Apply the original URL extraction logic using the regex
-  const match = url.match(/\/(track|artist|album)\/([^/]+)/);
-  return match;
+  return url ? url.match(/\/(track|artist|album)\/([^/]+)/) : null;
 };
