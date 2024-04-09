@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Listen } from "../types";
 import { SpotifyLink } from "./SpotifyLink";
 import { getItemUrl } from "../utils";
+import { MultipleArtists } from "./MultipleArtists";
 
 export const InternalLink = ({ url, text }: { url: string; text: string }) => (
   <Link to={url || null} className="hover:bg-violet-400 pl-1">
@@ -26,35 +27,6 @@ const SingleArtist: React.FC<{
     />
   </p>
 );
-const MultipleArtists: React.FC<{
-  artist_item_url: unknown;
-  item: Listen;
-}> = ({ item }) => (
-  <div className="flex">
-    <div className="basis-1/4 flex flex-col">
-      {item.track_metadata.additional_info.artist_names?.map((artist, i) => (
-        <p className="flex" key={artist}>
-          <SpotifyLink
-            url={
-              item.track_metadata.additional_info.spotify_artist_ids?.[i] ||
-              null
-            }
-          />
-          <InternalLink
-            url={
-              getItemUrl(
-                item,
-                `track_metadata.additional_info.spotify_artist_ids.[${i}]`,
-              )?.[0]
-            }
-            text={item.track_metadata.additional_info.artist_names[i]}
-          />
-        </p>
-      ))}
-    </div>
-  </div>
-);
-
 export const ListenComponent: React.FC<{ item: Listen }> = ({
   item,
 }: {
