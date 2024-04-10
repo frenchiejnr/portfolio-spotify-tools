@@ -50,7 +50,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
 
   return (
     <>
-      <div className="mx-auto flex w-full flex-1 flex-row items-center justify-between sm:flex-row">
+      <div className="mx-auto flex w-full flex-row items-start justify-between sm:flex-row">
         <div className="flex flex-grow basis-3/4 flex-col text-left sm:basis-5/6 sm:flex-row">
           <p className="flex sm:basis-1/4">
             <SpotifyLink url={item.track_metadata.additional_info.origin_url} />
