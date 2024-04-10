@@ -35,7 +35,7 @@ export const CountComponent: React.FC<{
           <p className="px-4 text-left">{item.name}</p>
         </Link>
       </div>
-      <p>{count}</p>
+      <p className="font-semibold">{count}</p>
     </div>
   );
 };
