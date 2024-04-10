@@ -79,7 +79,7 @@ const AlbumTracks = ({
   return (
     <>
       {isLoading ? (
-        <p>Loading Album Tracks</p>
+        <p className="text-center">... Loading Album Tracks</p>
       ) : (
         <>
           <div className="text-right text-sm">
