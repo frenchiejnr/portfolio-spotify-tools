@@ -34,13 +34,14 @@ export const MediaPage = ({
   };
 
   return (
-    <>
+    <div className="m-auto flex h-dvh w-5/6 flex-col">
       <MediaInfo id={mediaId!} mediaType={mediaType} />
       <MediaSortDropdown
         sortMethod={sortMethod}
         handleSortChange={handleSortChange}
       />
       {renderTracks({ sortMethod, songCounts, mediaId })}
+      <hr />
       <RecentListensDisplay
         data={songPlays}
         dataLength={songPlays.length}
@@ -48,7 +49,7 @@ export const MediaPage = ({
         title={"Recent Listens"}
         totalLabel={"Listens"}
       />
-    </>
+    </div>
   );
 };
 

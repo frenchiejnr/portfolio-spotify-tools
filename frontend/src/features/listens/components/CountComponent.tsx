@@ -21,11 +21,18 @@ export const CountComponent: React.FC<{
 
   const url = getItemUrl(item, "external_urls.spotify");
   return (
-    <div key={item} className="mx-auto flex w-2/5 justify-between">
+    <div
+      key={item}
+      className="mx-auto flex w-full flex-1 items-center justify-between"
+    >
       <div className="flex">
         <SpotifyLink url={item.external_urls.spotify} />
-        <Link to={url?.[0]!} target="" className="ml-1 hover:text-violet-400">
-          <p>{item.name}</p>
+        <Link
+          to={url?.[0]!}
+          target=""
+          className="flex items-center hover:font-medium hover:text-violet-400"
+        >
+          <p className="px-4 text-left">{item.name}</p>
         </Link>
       </div>
       <p>{count}</p>

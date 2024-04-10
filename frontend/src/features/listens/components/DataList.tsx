@@ -59,7 +59,7 @@ export const DataList = ({
               </label>
             </p>
           </div>
-          <div className=" basis-11/12">
+          <div className="basis-11/12">
             <Pagination
               totalCount={data.length}
               pageSize={10}

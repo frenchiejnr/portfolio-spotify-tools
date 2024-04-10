@@ -19,7 +19,7 @@ export const ListComponent: React.FC<{
           target=""
           className="flex items-center hover:font-medium hover:text-violet-400"
         >
-          <p className="tex px-4 text-left">{item.name}</p>
+          <p className="px-4 text-left">{item.name}</p>
         </Link>
       </div>
       <p className="">{item.count}</p>
