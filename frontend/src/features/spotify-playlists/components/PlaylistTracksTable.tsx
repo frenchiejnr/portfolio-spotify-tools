@@ -6,7 +6,7 @@ export const PlaylistTracksTable: React.FC<{
   songCounts: {};
 }> = ({ filteredTracks, songCounts }) => (
   <>
-    <div className="flex w-4/5 justify-between mx-auto">
+    <div className="mx-auto flex w-4/5 justify-between">
       <div className=" ml-1 basis-1/4">
         <p>Track Name</p>
       </div>

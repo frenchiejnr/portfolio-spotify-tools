@@ -19,12 +19,13 @@ import { useReducer } from "react";
 import { useListenData } from "@/hooks/useListenData";
 
 export const HomeContent: React.FC<{}> = () => {
+  const { isFetchingListens, getListens } = useListenData();
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const { data, dataLength } = useRecentListens(
     "listens",
     (a, b) => b.listened_at - a.listened_at,
   );
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  const { isFetchingListens, getListens } = useListenData();
+
   const handleListenBrainz = async () => {
     let response = await getListOfArtists();
     console.log(response);

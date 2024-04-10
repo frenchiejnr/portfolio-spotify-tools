@@ -36,7 +36,7 @@ function HomePage() {
       {validToken ? (
         <HomeContent />
       ) : (
-        <div className="flex justify-center content-center">
+        <div className="flex content-center justify-center">
           <LoginButton />
         </div>
       )}

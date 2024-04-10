@@ -17,8 +17,8 @@ export const LoginButton = () => {
   return (
     <button
       onClick={Login}
-      className={`flex bg-[#1ED760] rounded-3xl px-4 w-64 h-10 justify-center content-center
-        flex-wrap`}
+      className={`flex h-10 w-64 flex-wrap content-center justify-center rounded-3xl bg-[#1ED760]
+        px-4`}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

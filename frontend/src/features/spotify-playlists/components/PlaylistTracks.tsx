@@ -9,14 +9,14 @@ export const PlaylistTracks: React.FC<{
   const songId = item.track?.id;
   const listenCount = songCounts[songId] || 0;
   return (
-    <div key={item.track?.id} className="flex w-4/5 justify-between mx-auto">
-      <div className=" ml-1 basis-1/4 flex">
+    <div key={item.track?.id} className="mx-auto flex w-4/5 justify-between">
+      <div className=" ml-1 flex basis-1/4">
         <SpotifyLink url={item.track?.external_urls.spotify} />
         <Link to={`/track/${item.track?.id}`} className="hover:text-violet-400">
           {item.track?.name}
         </Link>
       </div>
-      <div className=" ml-1 basis-1/4 flex">
+      <div className=" ml-1 flex basis-1/4">
         <SpotifyLink url={item.track?.artists[0].external_urls.spotify} />
         <Link
           to={`/artist/${item.track?.artists[0].id}`}
@@ -25,7 +25,7 @@ export const PlaylistTracks: React.FC<{
           {item.track?.artists[0].name}
         </Link>
       </div>
-      <div className=" ml-1 basis-1/4 flex">
+      <div className=" ml-1 flex basis-1/4">
         <SpotifyLink url={item.track?.album.external_urls.spotify} />
         <Link
           to={`/album/${item.track?.album.id}`}

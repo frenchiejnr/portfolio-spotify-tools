@@ -22,6 +22,9 @@ export const useRecentListens = <T extends RecentListen>(
       console.log(`refreshing ${dataKey} data`);
       setIsLoading(true);
       const response: DataItem<T>[] = await getData(dataKey);
+      if (!response) {
+        return;
+      }
       response.sort(sortFn);
 
       const filteredResponse: DataItem<T>[] = [];

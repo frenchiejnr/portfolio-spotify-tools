@@ -14,8 +14,8 @@ export const RecentListensDisplay = (props: RecentListensProps<Listen>) => {
 
   return (
     <>
-      <h1 className="text-xl font-bold my-2">{title}</h1>
-      <p className="text-lg font-semibold mb-1">
+      <h1 className="my-2 text-xl font-bold">{title}</h1>
+      <p className="mb-1 text-lg font-semibold">
         {totalLabel} - {dataLength}
       </p>
       <Pagination

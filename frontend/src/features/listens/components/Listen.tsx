@@ -5,7 +5,7 @@ import { getItemUrl } from "../utils";
 import { MultipleArtists } from "./MultipleArtists";
 
 export const InternalLink = ({ url, text }: { url: string; text: string }) => (
-  <Link to={url || null} className="hover:bg-violet-400 pl-1">
+  <Link to={url || null} className="pl-1 hover:bg-violet-400">
     {text}
   </Link>
 );
@@ -14,7 +14,7 @@ const SingleArtist: React.FC<{
   artist_item_url: string;
   item: Listen;
 }> = ({ artist_item_url, item }) => (
-  <p className="basis-1/4 flex">
+  <p className="flex basis-1/4">
     <SpotifyLink
       url={
         item.track_metadata.additional_info.spotify_album_artist_ids?.[0] ||
@@ -46,8 +46,8 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
   )?.[0];
 
   return (
-    <div className="flex w-4/5 justify-between mx-auto">
-      <p className="basis-1/4 flex">
+    <div className="mx-auto flex w-4/5 justify-between">
+      <p className="flex basis-1/4">
         <SpotifyLink url={item.track_metadata.additional_info.origin_url} />
         <InternalLink
           url={track_item_url}
@@ -59,7 +59,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
       ) : (
         <MultipleArtists artist_item_url={"1"} item={item} />
       )}
-      <p className="basis-1/4 flex">
+      <p className="flex basis-1/4">
         <SpotifyLink
           url={item.track_metadata.additional_info.spotify_album_id}
         />
