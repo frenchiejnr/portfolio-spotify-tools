@@ -6,12 +6,12 @@ export const PlaylistItems: React.FC<{
   item: SpotifyApi.PlaylistObjectSimplified;
 }> = ({ item }) => {
   return (
-    <div key={item.id} className="flex w-2/5 justify-between mx-auto">
+    <div key={item.id} className="mx-auto flex w-2/5 justify-between">
       <div className="flex">
         <SpotifyLink url={item.external_urls.spotify} />
         <Link
           to={`${item.uri.split(":")[2]}`}
-          className="hover:bg-violet-400 ml-1"
+          className="ml-1 hover:bg-violet-400"
         >
           {item.name}
         </Link>

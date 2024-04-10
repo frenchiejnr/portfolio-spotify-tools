@@ -16,7 +16,7 @@ const MediaInfo = ({
       {isLoading ? (
         <div>Loading</div>
       ) : (
-        <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2">
+        <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2 text-right">
           <p className="text-xl font-bold">{mediaInfo?.name}</p>
           <p className="semi-bold text-lg">{songPlays?.length} Plays</p>
         </div>

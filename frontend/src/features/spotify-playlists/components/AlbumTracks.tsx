@@ -82,7 +82,7 @@ const AlbumTracks = ({
         <p>Loading Album Tracks</p>
       ) : (
         <>
-          <div className="text-center text-sm">
+          <div className="text-right text-sm">
             <p>
               {songCounts.length} of {albumTracks.length} Tracks
             </p>

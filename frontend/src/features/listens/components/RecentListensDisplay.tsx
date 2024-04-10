@@ -14,16 +14,20 @@ export const RecentListensDisplay = (props: RecentListensProps<Listen>) => {
 
   return (
     <>
-      <h1 className="my-2 text-xl font-bold">{title}</h1>
-      <p className="mb-1 text-lg font-semibold">
-        {totalLabel} - {dataLength}
-      </p>
-      <Pagination
-        totalCount={dataLength}
-        pageSize={10}
-        data={data}
-        ItemComponent={ItemComponent}
-      />
+      <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2">
+        <h1 className="text-right text-xl font-bold">{title}</h1>
+        <p className="text-right text-lg font-semibold">
+          {totalLabel} - {dataLength}
+        </p>
+      </div>
+      <div className="basis-11/12">
+        <Pagination
+          totalCount={dataLength}
+          pageSize={10}
+          data={data}
+          ItemComponent={ItemComponent}
+        />
+      </div>
     </>
   );
 };

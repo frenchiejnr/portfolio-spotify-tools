@@ -12,7 +12,7 @@ export const MultipleArtists: React.FC<{
   return (
     <div className="flex" onClick={() => setShowArtists(!showArtists)}>
       {showArtists ? (
-        <div className="flex basis-1/4 flex-col">
+        <div className="flex flex-col sm:basis-1/4">
           {item.track_metadata.additional_info.artist_names?.map(
             (artist, i) => (
               <p className="flex" key={artist}>
@@ -37,7 +37,7 @@ export const MultipleArtists: React.FC<{
           )}
         </div>
       ) : (
-        <p>
+        <p className="ml-5 pl-4 hover:font-medium hover:text-violet-400">
           {item.track_metadata.additional_info.artist_names?.length} Artists
         </p>
       )}
