@@ -3,11 +3,16 @@ import { Listen } from "../types";
 import { SpotifyLink } from "./SpotifyLink";
 import { getItemUrl } from "../utils";
 import { MultipleArtists } from "./MultipleArtists";
+import {
+  AlbumIcon,
+  ArtistIcon,
+  TrackIcon,
+} from "@/features/spotify-playlists/components/Icons";
 
 export const InternalLink = ({ url, text }: { url: string; text: string }) => (
   <Link
     to={url || null}
-    className="pl-4 hover:font-medium hover:text-violet-400"
+    className="pl-1 hover:font-medium hover:text-violet-400"
   >
     {text}
   </Link>
@@ -23,11 +28,14 @@ const SingleArtist: React.FC<{
         item.track_metadata.additional_info.spotify_album_artist_ids?.[0] ||
         null
       }
-    />
-    <InternalLink
-      url={artist_item_url}
-      text={item.track_metadata.artist_name}
-    />
+    />{" "}
+    <div className="flex flex-row">
+      <ArtistIcon />
+      <InternalLink
+        url={artist_item_url}
+        text={item.track_metadata.artist_name}
+      />
+    </div>
   </p>
 );
 export const ListenComponent: React.FC<{ item: Listen }> = ({
@@ -54,10 +62,13 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
         <div className="flex flex-grow basis-3/4 flex-col text-left sm:basis-5/6 sm:flex-row">
           <p className="flex sm:basis-1/4">
             <SpotifyLink url={item.track_metadata.additional_info.origin_url} />
-            <InternalLink
-              url={track_item_url}
-              text={item.track_metadata.track_name}
-            />
+            <div className="flex flex-row">
+              <TrackIcon />
+              <InternalLink
+                url={track_item_url}
+                text={item.track_metadata.track_name}
+              />
+            </div>
           </p>
           {item.track_metadata.additional_info.artist_names?.length === 1 ? (
             <SingleArtist artist_item_url={artist_item_url} item={item} />
@@ -67,11 +78,14 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
           <p className="flex sm:basis-1/4">
             <SpotifyLink
               url={item.track_metadata.additional_info.spotify_album_id}
-            />
-            <InternalLink
-              url={album_item_url}
-              text={item.track_metadata.release_name}
-            />
+            />{" "}
+            <div className="flex flex-row">
+              <AlbumIcon />
+              <InternalLink
+                url={album_item_url}
+                text={item.track_metadata.release_name}
+              />
+            </div>
           </p>
         </div>
         <p className="basis-1/4 self-center text-xs sm:basis-1/6 sm:text-base">

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { getItemUrl } from "../utils";
 import { SpotifyLink } from "./SpotifyLink";
 import { useEffect, useState } from "react";
+import { PlayIcon } from "@/features/spotify-playlists/components/Icons";
 
 export const CountComponent: React.FC<{
   item: any;
@@ -35,7 +36,10 @@ export const CountComponent: React.FC<{
           <p className="px-4 text-left">{item.name}</p>
         </Link>
       </div>
-      <p className="font-semibold">{count}</p>
+      <div className="flex flex-row">
+        <PlayIcon />
+        <p className="font-semibold">{count}</p>
+      </div>
     </div>
   );
 };

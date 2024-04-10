@@ -62,17 +62,21 @@ const Playlist = () => {
 
   return (
     <div className="m-auto flex h-dvh w-5/6 flex-col">
-      <PlaylistHeader
-        filteredTracks={filteredTracks}
-        isLoading={isLoading}
-        playlist={playlist}
-        setShowUnplayedOnly={setShowUnplayedOnly}
-        showUnplayedOnly={showUnplayedOnly}
-      />
-      <PlaylistTracksTable
-        filteredTracks={filteredTracks}
-        songCounts={songCounts}
-      />
+      <div className="basis-1/6">
+        <PlaylistHeader
+          filteredTracks={filteredTracks}
+          isLoading={isLoading}
+          playlist={playlist}
+          setShowUnplayedOnly={setShowUnplayedOnly}
+          showUnplayedOnly={showUnplayedOnly}
+        />
+      </div>
+      <div className="basis-5/6">
+        <PlaylistTracksTable
+          filteredTracks={filteredTracks}
+          songCounts={songCounts}
+        />
+      </div>
     </div>
   );
 };
