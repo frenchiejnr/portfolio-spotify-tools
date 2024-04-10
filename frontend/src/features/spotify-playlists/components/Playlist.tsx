@@ -61,7 +61,7 @@ const Playlist = () => {
   }, [[playlist.tracks?.items, songCounts, showUnplayedOnly]]);
 
   return (
-    <>
+    <div className="m-auto flex h-dvh w-5/6 flex-col">
       <PlaylistHeader
         filteredTracks={filteredTracks}
         isLoading={isLoading}
@@ -73,7 +73,7 @@ const Playlist = () => {
         filteredTracks={filteredTracks}
         songCounts={songCounts}
       />
-    </>
+    </div>
   );
 };
 

@@ -28,6 +28,11 @@ export const CreateUnplayedPlaylistButton = ({ playlist, filteredTracks }) => {
     }
   };
   return (
-    <button onClick={handleClick}>Create Playlist of unplayed tracks</button>
+    <button
+      onClick={handleClick}
+      className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+    >
+      Create Playlist of unplayed tracks
+    </button>
   );
 };
