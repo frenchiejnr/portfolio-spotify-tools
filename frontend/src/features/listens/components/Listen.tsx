@@ -74,7 +74,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
             />
           </p>
         </div>
-        <p className="basis-1/4 text-xs sm:basis-1/6 sm:text-base">
+        <p className="basis-1/4 self-center text-xs sm:basis-1/6 sm:text-base">
           {new Intl.DateTimeFormat("en-GB", {
             weekday: "short",
             day: "2-digit",

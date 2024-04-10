@@ -1,4 +1,3 @@
-import Pagination from "@/components/Pagination";
 import { ListenComponent } from "@/features/listens/components/Listen";
 import { useMediaPlays } from "@/hooks/useMediaPlays";
 import { useMediaInfo } from "@/hooks/useMediaInfo";
@@ -30,6 +29,7 @@ export const TrackPage = () => {
             ItemComponent={ListenComponent}
             title={`${mediaInfo?.name} Recent Listens`}
             totalLabel={"Plays"}
+            bgColour="bg-indigo-200/50"
           />
         </>
       )}

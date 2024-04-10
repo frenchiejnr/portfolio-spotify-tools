@@ -8,13 +8,16 @@ interface RecentListensProps<T> {
   ItemComponent: React.FC<T>;
   title: string;
   totalLabel: string;
+  bgColour?: string;
 }
 export const RecentListensDisplay = (props: RecentListensProps<Listen>) => {
   const { data, dataLength, ItemComponent, title, totalLabel } = props;
 
   return (
     <>
-      <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2">
+      <div
+        className={`mt-1 w-full flex-grow basis-1/12 rounded-xl ${props.bgColour ? props.bgColour : "bg-indigo-200"} p-2`}
+      >
         <h1 className="text-right text-xl font-bold">{title}</h1>
         <p className="text-right text-lg font-semibold">
           {totalLabel} - {dataLength}
