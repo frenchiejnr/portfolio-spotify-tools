@@ -22,7 +22,7 @@ const SingleArtist: React.FC<{
   artist_item_url: string;
   item: Listen;
 }> = ({ artist_item_url, item }) => (
-  <p className="flex">
+  <div className="flex">
     <SpotifyLink
       url={
         item.track_metadata.additional_info.spotify_album_artist_ids?.[0] ||
@@ -36,7 +36,7 @@ const SingleArtist: React.FC<{
         text={item.track_metadata.artist_name}
       />
     </div>
-  </p>
+  </div>
 );
 export const ListenComponent: React.FC<{ item: Listen }> = ({
   item,
@@ -60,7 +60,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
     <>
       <div className="mx-auto flex w-full flex-row items-start justify-between sm:flex-row">
         <div className="flex flex-grow basis-3/4 flex-col text-left sm:basis-5/6 sm:flex-row">
-          <p className="flex sm:basis-1/4">
+          <div className="flex sm:basis-1/4">
             <SpotifyLink url={item.track_metadata.additional_info.origin_url} />
             <div className="flex flex-row">
               <TrackIcon />
@@ -69,13 +69,13 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
                 text={item.track_metadata.track_name}
               />
             </div>
-          </p>
+          </div>
           {item.track_metadata.additional_info.artist_names?.length === 1 ? (
             <SingleArtist artist_item_url={artist_item_url} item={item} />
           ) : (
             <MultipleArtists artist_item_url={"1"} item={item} />
           )}
-          <p className="flex sm:basis-1/4">
+          <div className="flex sm:basis-1/4">
             <SpotifyLink
               url={item.track_metadata.additional_info.spotify_album_id}
             />{" "}
@@ -86,7 +86,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
                 text={item.track_metadata.release_name}
               />
             </div>
-          </p>
+          </div>
         </div>
         <p className="basis-1/4 self-center text-xs sm:basis-1/6 sm:text-base">
           {new Intl.DateTimeFormat("en-GB", {

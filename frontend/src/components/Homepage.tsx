@@ -31,17 +31,7 @@ function HomePage() {
     retrieveSpotifyToken();
   }, []);
 
-  return (
-    <>
-      {validToken ? (
-        <HomeContent />
-      ) : (
-        <div className="flex content-center justify-center">
-          <LoginButton />
-        </div>
-      )}
-    </>
-  );
+  return <>{validToken ? <HomeContent /> : <LoginButton />}</>;
 }
 
 export default HomePage;
