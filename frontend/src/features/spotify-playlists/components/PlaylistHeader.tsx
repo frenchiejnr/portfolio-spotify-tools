@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { UnplayedTracksCount } from "./UnplayedTracksCount";
 import { CreateUnplayedPlaylistButton } from "./CreateUnplayedPlaylistButton";
+import { ShufflePlaylistButton } from "./ShufflePlaylistButton";
 
 type PlaylistHeaderProps = React.FC<{
   filteredTracks: SpotifyApi.PlaylistTrackObject[];
@@ -62,6 +63,7 @@ export const PlaylistHeader: PlaylistHeaderProps = ({
             filteredTracks={filteredTracks}
           />
         )}
+        <ShufflePlaylistButton tracks={filteredTracks} playlist={playlist} />
       </div>
     </>
   );
