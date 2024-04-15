@@ -16,7 +16,7 @@ export const MultipleArtists: React.FC<{
         <div className="flex flex-col sm:basis-1/4">
           {item.track_metadata.additional_info.artist_names?.map(
             (artist, i) => (
-              <p className="flex" key={artist}>
+              <div className="flex" key={artist}>
                 <SpotifyLink
                   url={
                     item.track_metadata.additional_info.spotify_artist_ids?.[
@@ -36,7 +36,7 @@ export const MultipleArtists: React.FC<{
                     text={item.track_metadata.additional_info.artist_names[i]}
                   />
                 </div>
-              </p>
+              </div>
             ),
           )}
         </div>
