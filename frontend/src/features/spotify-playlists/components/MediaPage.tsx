@@ -18,6 +18,7 @@ export const MediaPage = ({
 }) => {
   const songPlays = useMediaPlays(mediaId!, mediaType);
   const [sortMethod, setSortMethod] = useState("by-count");
+  const [showTracks, setShowTracks] = useState(true);
   const [songCounts, setSongCounts] = useState<MediaItemWithCount[]>([]);
 
   useEffect(() => {
@@ -33,14 +34,26 @@ export const MediaPage = ({
     setSortMethod(event.target.value);
   };
 
+  const handleShowTracksChange = () => {
+    setShowTracks((prevShowTracks) => !prevShowTracks);
+  };
+
   return (
-    <>
-      <MediaInfo id={mediaId!} mediaType={mediaType} />
-      <MediaSortDropdown
-        sortMethod={sortMethod}
-        handleSortChange={handleSortChange}
+    <div className="m-auto flex h-dvh w-5/6 flex-col">
+      <MediaInfo
+        id={mediaId!}
+        mediaType={mediaType}
+        handleShowTracksChange={handleShowTracksChange}
+        showTracks={showTracks}
       />
-      {renderTracks({ sortMethod, songCounts, mediaId })}
+      {showTracks && (
+        <MediaSortDropdown
+          sortMethod={sortMethod}
+          handleSortChange={handleSortChange}
+        />
+      )}
+      {showTracks && renderTracks({ sortMethod, songCounts, mediaId })}
+      <hr />
       <RecentListensDisplay
         data={songPlays}
         dataLength={songPlays.length}
@@ -48,7 +61,7 @@ export const MediaPage = ({
         title={"Recent Listens"}
         totalLabel={"Listens"}
       />
-    </>
+    </div>
   );
 };
 

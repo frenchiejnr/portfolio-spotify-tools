@@ -3,11 +3,15 @@ import React from "react";
 export const SpotifyLink: React.FC<{
   url: string;
 }> = ({ url }) => (
-  <a href={url ? url : "#"} target={url ? "_blank" : ""}>
+  <a
+    href={url ? url : "#"}
+    target={url ? "_blank" : ""}
+    className="flex items-center"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 496 512"
-      className={`size-5 basis-4 align-text-bottom ${
+      className={`size-5 align-text-bottom ${
         url ? "hover:fill-green-600" : "hover:fill-red-600"
       }`}
     >

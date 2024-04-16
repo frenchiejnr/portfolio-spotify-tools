@@ -3,6 +3,7 @@ import { SpotifyLink } from "./SpotifyLink";
 import { getItemUrl } from "../utils";
 import { InternalLink } from "./Listen";
 import { useState } from "react";
+import { ArtistIcon } from "@/features/spotify-playlists/components/Icons";
 
 export const MultipleArtists: React.FC<{
   artist_item_url: unknown;
@@ -10,12 +11,15 @@ export const MultipleArtists: React.FC<{
 }> = ({ item }) => {
   const [showArtists, setShowArtists] = useState(false);
   return (
-    <div className="flex" onClick={() => setShowArtists(!showArtists)}>
+    <div
+      className="flex md:basis-1/3"
+      onClick={() => setShowArtists(!showArtists)}
+    >
       {showArtists ? (
-        <div className="basis-1/4 flex flex-col">
+        <div className="flex flex-col ">
           {item.track_metadata.additional_info.artist_names?.map(
             (artist, i) => (
-              <p className="flex" key={artist}>
+              <div className="flex" key={artist}>
                 <SpotifyLink
                   url={
                     item.track_metadata.additional_info.spotify_artist_ids?.[
@@ -23,23 +27,29 @@ export const MultipleArtists: React.FC<{
                     ] || null
                   }
                 />
-                <InternalLink
-                  url={
-                    getItemUrl(
-                      item,
-                      `track_metadata.additional_info.spotify_artist_ids.[${i}]`,
-                    )?.[0]
-                  }
-                  text={item.track_metadata.additional_info.artist_names[i]}
-                />
-              </p>
+                <div className="flex flex-row">
+                  <ArtistIcon />
+                  <InternalLink
+                    url={
+                      getItemUrl(
+                        item,
+                        `track_metadata.additional_info.spotify_artist_ids.[${i}]`,
+                      )?.[0]
+                    }
+                    text={item.track_metadata.additional_info.artist_names[i]}
+                  />
+                </div>
+              </div>
             ),
           )}
         </div>
       ) : (
-        <p>
-          {item.track_metadata.additional_info.artist_names?.length} Artists
-        </p>
+        <div className="ml-5 flex flex-row ">
+          <ArtistIcon />
+          <p className="pl-1 hover:font-medium hover:text-violet-400">
+            {item.track_metadata.additional_info.artist_names?.length} Artists
+          </p>
+        </div>
       )}
     </div>
   );

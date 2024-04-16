@@ -12,6 +12,7 @@ export type DataItem<T> = T;
 export const useRecentListens = <T extends RecentListen>(
   dataKey: string,
   sortFn: (a: T, b: T) => number,
+  refresh?: boolean,
 ) => {
   const [data, setData] = useState<DataItem<T>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +23,9 @@ export const useRecentListens = <T extends RecentListen>(
       console.log(`refreshing ${dataKey} data`);
       setIsLoading(true);
       const response: DataItem<T>[] = await getData(dataKey);
+      if (!response) {
+        return;
+      }
       response.sort(sortFn);
 
       const filteredResponse: DataItem<T>[] = [];
@@ -39,7 +43,7 @@ export const useRecentListens = <T extends RecentListen>(
       setIsLoading(false);
     };
     fetchData();
-  }, [dataKey]);
+  }, [dataKey, refresh]);
 
   return { data, isLoading, dataLength };
 };

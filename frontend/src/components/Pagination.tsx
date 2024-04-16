@@ -32,24 +32,32 @@ const Pagination: React.FC<PaginationProps> = ({
     setCurrentPage(selectedPage.selected);
   };
   return (
-    <div className="text-center">
-      {subset.map((item) => {
-        item.keyid = uuidv4();
-        return (
-          <ItemComponent key={item.keyid} item={item} songCounts={songCounts} />
-        );
-      })}
-      <div className="flex justify-center mt-4">
+    <div className="flex  w-full flex-grow flex-col text-center">
+      <div className="flex h-full flex-grow basis-11/12 flex-col">
+        {subset.map((item) => {
+          item.keyid = uuidv4();
+          return (
+            <ItemComponent
+              key={item.keyid}
+              item={item}
+              songCounts={songCounts}
+            />
+          );
+        })}
+      </div>
+      <div className="mb-1 flex basis-1/12 justify-center rounded-xl bg-indigo-200 p-1">
         <ReactPaginate
           pageCount={totalPages}
           onPageChange={handlePageChange}
-          className="pagination flex list-none rounded-md space-x-1"
+          className=" flex w-full list-none items-center justify-between space-x-1 rounded-md "
           activeClassName="active bg-gray-200 text-gray-700 rounded-md "
-          previousLinkClassName="prev px-2 py-1 rounded-md hover:bg-gray-100 shadow"
-          nextLinkClassName="next px-2 py-1 rounded-md hover:bg-gray-100 shadow"
-          pageLinkClassName="page-link px-2 py-1 hover:bg-gray-100 rounded-md"
-          pageRangeDisplayed={2}
+          previousLinkClassName="prev px-2 py-1 rounded-md  shadow bg-gray-200 hover:bg-gray-100"
+          nextLinkClassName="next px-2 py-1 rounded-md shadow bg-gray-200  hover:bg-gray-100"
+          pageLinkClassName="page-link px-2 py-1 rounded-md hover:bg-gray-100"
+          pageRangeDisplayed={0}
           marginPagesDisplayed={1}
+          previousLabel={"<"}
+          nextLabel={">"}
         />
       </div>
     </div>

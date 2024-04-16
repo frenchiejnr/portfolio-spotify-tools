@@ -8,14 +8,21 @@ export const ListComponent: React.FC<{
 }> = ({ item }) => {
   const url = getItemUrl(item);
   return (
-    <div key={item} className="flex w-2/5 justify-between mx-auto">
+    <div
+      key={item}
+      className="mx-auto flex w-full flex-1 items-center justify-between"
+    >
       <div className="flex">
         <SpotifyLink url={item.url} />
-        <Link to={url?.[0]} target="" className="hover:text-violet-400 ml-1">
-          <p>{item.name}</p>
+        <Link
+          to={url?.[0]}
+          target=""
+          className="flex items-center hover:font-medium hover:text-violet-400"
+        >
+          <p className="px-4 text-left">{item.name}</p>
         </Link>
       </div>
-      <p>{item.count}</p>
+      <p className="">{item.count}</p>
     </div>
   );
 };

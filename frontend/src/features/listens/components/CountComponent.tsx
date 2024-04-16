@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { getItemUrl } from "../utils";
 import { SpotifyLink } from "./SpotifyLink";
 import { useEffect, useState } from "react";
+import { PlayIcon } from "@/features/spotify-playlists/components/Icons";
 
 export const CountComponent: React.FC<{
   item: any;
@@ -21,14 +22,24 @@ export const CountComponent: React.FC<{
 
   const url = getItemUrl(item, "external_urls.spotify");
   return (
-    <div key={item} className="flex w-2/5 justify-between mx-auto">
+    <div
+      key={item}
+      className="mx-auto flex w-full flex-1 items-center justify-between"
+    >
       <div className="flex">
         <SpotifyLink url={item.external_urls.spotify} />
-        <Link to={url?.[0]!} target="" className="hover:text-violet-400 ml-1">
-          <p>{item.name}</p>
+        <Link
+          to={url?.[0]!}
+          target=""
+          className="flex items-center hover:font-medium hover:text-violet-400"
+        >
+          <p className="px-4 text-left">{item.name}</p>
         </Link>
       </div>
-      <p>{count}</p>
+      <div className="flex flex-row">
+        <PlayIcon />
+        <p className="font-semibold">{count}</p>
+      </div>
     </div>
   );
 };

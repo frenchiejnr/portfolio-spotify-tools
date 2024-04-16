@@ -70,21 +70,30 @@ const ArtistTracks = ({
 
   return (
     <>
-      {!isLoading && (
-        <div>
-          <p>
-            {songCounts.length} of {artistTracks.length} Tracks
-          </p>
-          {((songCounts.length / artistTracks.length) * 100).toFixed(2)}% Played
-        </div>
+      {isLoading ? (
+        <p className="text-center">... Loading Artist Tracks</p>
+      ) : (
+        <>
+          <div className="text-right text-sm">
+            <p>
+              {songCounts.length} of {artistTracks.length} Tracks
+            </p>
+            <p>
+              {((songCounts.length / artistTracks.length) * 100).toFixed(2)}%
+              Played
+            </p>
+          </div>
+          <div>
+            <Pagination
+              totalCount={artistTracks.length}
+              pageSize={10}
+              data={sortTracks(artistTracks)} // Pass sorted data to Pagination
+              ItemComponent={CountComponent}
+              songCounts={songCounts}
+            />
+          </div>
+        </>
       )}
-      <Pagination
-        totalCount={artistTracks.length}
-        pageSize={10}
-        data={sortTracks(artistTracks)} // Pass sorted data to Pagination
-        ItemComponent={CountComponent}
-        songCounts={songCounts}
-      />
     </>
   );
 };

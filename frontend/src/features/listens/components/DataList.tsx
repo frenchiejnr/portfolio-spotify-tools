@@ -35,30 +35,40 @@ export const DataList = ({
   }, [, sortByLastPlayed]);
 
   return (
-    <div>
+    <div className="m-auto flex h-dvh w-5/6 flex-col">
       {isLoading ? (
         <p>Loading {title}</p>
       ) : (
         <>
-          <h1 className="text-xl font-bold my-2">{title} List</h1>
-          <p className="text-lg font-semibold mb-1">
-            Total {title} - {data.length}
-          </p>
-          <label htmlFor="lastPlayed">
-            <input
-              type="checkbox"
-              id="lastPlayed"
-              checked={sortByLastPlayed}
-              onChange={(e) => setSortByLastPlayed(e.target.checked)}
+          <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2">
+            <h1 className="text-right text-xl font-bold md:text-center">
+              {title} List
+            </h1>
+            <p className="text-right text-lg font-semibold md:text-center">
+              Total {title} - {data.length}
+            </p>
+            <hr className="border-black" />
+            <p className="text-right">
+              <input
+                type="checkbox"
+                id="lastPlayed"
+                checked={sortByLastPlayed}
+                onChange={(e) => setSortByLastPlayed(e.target.checked)}
+                className=""
+              />
+              <label htmlFor="lastPlayed" className="pl-1">
+                Sort by Last Played
+              </label>
+            </p>
+          </div>
+          <div className="basis-11/12">
+            <Pagination
+              totalCount={data.length}
+              pageSize={10}
+              data={data}
+              ItemComponent={ListComponent}
             />
-            Sort by Last Played
-          </label>
-          <Pagination
-            totalCount={data.length}
-            pageSize={10}
-            data={data}
-            ItemComponent={ListComponent}
-          />
+          </div>
         </>
       )}
     </div>

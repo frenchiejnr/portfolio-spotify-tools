@@ -15,16 +15,15 @@ import {
   processListensForMissingSpotifyIds,
 } from "@/features/listens/utils";
 import { getData, setData } from "@/utils/indexDB";
-import { useReducer } from "react";
 import { useListenData } from "@/hooks/useListenData";
 
 export const HomeContent: React.FC<{}> = () => {
+  const { isFetchingListens, getListens } = useListenData();
   const { data, dataLength } = useRecentListens(
     "listens",
     (a, b) => b.listened_at - a.listened_at,
   );
-  const [, forceUpdate] = useReducer((x) => x + 1, 0);
-  const { isFetchingListens, getListens } = useListenData();
+
   const handleListenBrainz = async () => {
     let response = await getListOfArtists();
     console.log(response);
@@ -62,7 +61,6 @@ export const HomeContent: React.FC<{}> = () => {
         disabled={isFetchingListens}
         onClick={() => {
           getListens();
-          forceUpdate();
         }}
       >
         Check For More Listens

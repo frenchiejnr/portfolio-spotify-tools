@@ -219,7 +219,6 @@ export const processListensForMissingSpotifyIds = async (
     if (groupInfo) {
       listen.track_metadata.additional_info = {
         ...groupInfo.listen.track_metadata.additional_info,
-       
       };
     }
   });

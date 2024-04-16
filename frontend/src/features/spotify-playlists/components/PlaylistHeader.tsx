@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { UnplayedTracksCount } from "./UnplayedTracksCount";
 import { CreateUnplayedPlaylistButton } from "./CreateUnplayedPlaylistButton";
+import { ShufflePlaylistButton } from "./ShufflePlaylistButton";
 
 type PlaylistHeaderProps = React.FC<{
   filteredTracks: SpotifyApi.PlaylistTrackObject[];
@@ -19,36 +20,53 @@ export const PlaylistHeader: PlaylistHeaderProps = ({
 }) => {
   return (
     <>
-      <div>{playlist.name}</div>
-      {showUnplayedOnly ? (
-        <UnplayedTracksCount
-          filteredTracks={filteredTracks}
-          playlist={playlist}
-        />
-      ) : (
-        <div>{filteredTracks.length} tracks</div>
-      )}
-      <Link to={"/playlists"}>Back to Playlists</Link>
-      {isLoading && (
-        <p>
-          {playlist.tracks?.items?.length} of {playlist.tracks?.total} Loaded
-        </p>
-      )}
-      <label htmlFor="no-listens">
-        <input
-          type="checkbox"
-          id="no-listens"
-          checked={showUnplayedOnly}
-          onChange={(e) => setShowUnplayedOnly(e.target.checked)}
-        />
-        Show Unplayed Songs only
-      </label>
-      {showUnplayedOnly && (
-        <CreateUnplayedPlaylistButton
-          playlist={playlist}
-          filteredTracks={filteredTracks}
-        />
-      )}
+      <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2 text-right md:text-center">
+        <p className="text-xl font-bold">{playlist.name}</p>
+        <p className="semi-bold text-lg">{playlist.owner.display_name}</p>
+        <div className="flex flex-row-reverse justify-between ">
+          {showUnplayedOnly ? (
+            <UnplayedTracksCount
+              filteredTracks={filteredTracks}
+              playlist={playlist}
+            />
+          ) : (
+            <div className="">{playlist.tracks.total} tracks</div>
+          )}
+          {isLoading && (
+            <p className="text-xs">
+              {playlist.tracks?.items?.length} tracks loaded
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="mt-1 flex w-full flex-col rounded-xl bg-indigo-100 p-2">
+        <div className="flex flex-row justify-between">
+          <Link
+            to={"/playlists"}
+            className="rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+          >
+            {"< "}All Playlists
+          </Link>
+          <label htmlFor="no-listens">
+            <input
+              type="checkbox"
+              id="no-listens"
+              checked={showUnplayedOnly}
+              onChange={(e) => setShowUnplayedOnly(e.target.checked)}
+            />
+            Unplayed only
+          </label>
+        </div>
+        <div className="flex justify-end gap-2">
+          {showUnplayedOnly && (
+            <CreateUnplayedPlaylistButton
+              playlist={playlist}
+              filteredTracks={filteredTracks}
+            />
+          )}
+          <ShufflePlaylistButton tracks={filteredTracks} playlist={playlist} />
+        </div>
+      </div>
     </>
   );
 };
