@@ -41,8 +41,10 @@ export const DataList = ({
       ) : (
         <>
           <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2">
-            <h1 className="text-right text-xl font-bold">{title} List</h1>
-            <p className="text-right text-lg font-semibold">
+            <h1 className="text-right text-xl font-bold md:text-center">
+              {title} List
+            </h1>
+            <p className="text-right text-lg font-semibold md:text-center">
               Total {title} - {data.length}
             </p>
             <hr className="border-black" />

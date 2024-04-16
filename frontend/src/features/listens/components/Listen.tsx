@@ -22,7 +22,7 @@ const SingleArtist: React.FC<{
   artist_item_url: string;
   item: Listen;
 }> = ({ artist_item_url, item }) => (
-  <div className="flex">
+  <div className="flex md:basis-1/3">
     <SpotifyLink
       url={
         item.track_metadata.additional_info.spotify_album_artist_ids?.[0] ||
@@ -58,11 +58,11 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
 
   return (
     <>
-      <div className="mx-auto flex w-full flex-row items-start justify-between sm:flex-row">
-        <div className="flex flex-grow basis-3/4 flex-col text-left sm:basis-5/6 sm:flex-row">
-          <div className="flex sm:basis-1/4">
+      <div className="mx-auto flex w-full flex-row items-start justify-between md:flex-row">
+        <div className="flex flex-grow basis-3/4 flex-col text-left md:basis-5/6 md:flex-row md:items-center">
+          <div className="flex md:basis-1/3 md:pr-1">
             <SpotifyLink url={item.track_metadata.additional_info.origin_url} />
-            <div className="flex flex-row">
+            <div className="flex flex-row ">
               <TrackIcon />
               <InternalLink
                 url={track_item_url}
@@ -75,7 +75,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
           ) : (
             <MultipleArtists artist_item_url={"1"} item={item} />
           )}
-          <div className="flex sm:basis-1/4">
+          <div className="flex md:basis-1/3 md:pr-1">
             <SpotifyLink
               url={item.track_metadata.additional_info.spotify_album_id}
             />{" "}
@@ -88,7 +88,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
             </div>
           </div>
         </div>
-        <p className="basis-1/4 self-center text-xs sm:basis-1/6 sm:text-base">
+        <p className="basis-1/4 self-center text-xs md:basis-1/5">
           {new Intl.DateTimeFormat("en-GB", {
             weekday: "short",
             day: "2-digit",
@@ -100,7 +100,7 @@ export const ListenComponent: React.FC<{ item: Listen }> = ({
           }).format(item.listened_at * 1000)}
         </p>
       </div>
-      <hr className="sm:hidden" />
+      <hr />
     </>
   );
 };

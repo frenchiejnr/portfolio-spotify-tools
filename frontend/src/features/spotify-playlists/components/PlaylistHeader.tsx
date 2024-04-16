@@ -20,17 +20,17 @@ export const PlaylistHeader: PlaylistHeaderProps = ({
 }) => {
   return (
     <>
-      <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2 text-right">
+      <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2 text-right md:text-center">
         <p className="text-xl font-bold">{playlist.name}</p>
         <p className="semi-bold text-lg">{playlist.owner.display_name}</p>
-        <div className="flex flex-row-reverse justify-between">
+        <div className="flex flex-row-reverse justify-between ">
           {showUnplayedOnly ? (
             <UnplayedTracksCount
               filteredTracks={filteredTracks}
               playlist={playlist}
             />
           ) : (
-            <div>{playlist.tracks.total} tracks</div>
+            <div className="">{playlist.tracks.total} tracks</div>
           )}
           {isLoading && (
             <p className="text-xs">

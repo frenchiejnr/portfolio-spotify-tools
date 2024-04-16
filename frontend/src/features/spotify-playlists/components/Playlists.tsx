@@ -24,7 +24,7 @@ const Playlists = () => {
   }, []);
   return (
     <div className="m-auto flex h-dvh w-5/6 flex-col">
-      <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2 text-right">
+      <div className="mt-1 w-full flex-grow basis-1/12 rounded-xl bg-indigo-200 p-2 text-right md:text-center">
         <h1 className="text-xl font-bold">{userName}s' Playlists</h1>
         <p className="semi-bold text-lg">{data?.length} Playlists</p>
       </div>

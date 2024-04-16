@@ -25,9 +25,13 @@ const MediaInfo = ({
           <button onClick={handleShowTracksChange}>
             {showTracks ? <UpIcon /> : <DownIcon />}
           </button>
-          <div>
-            <p className="text-xl font-bold">{mediaInfo?.name}</p>
-            <p className="semi-bold text-lg">{songPlays?.length} Plays</p>
+          <div className="flex-grow">
+            <p className="text-xl font-bold  md:text-center">
+              {mediaInfo?.name}
+            </p>
+            <p className="semi-bold text-lg  md:text-center">
+              {songPlays?.length} Plays
+            </p>
           </div>
         </div>
       )}

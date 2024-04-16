@@ -6,18 +6,20 @@ export const PlaylistTracksTable: React.FC<{
   songCounts: {};
 }> = ({ filteredTracks, songCounts }) => (
   <>
-    <div className="mx-auto hidden w-4/5 justify-between sm:flex ">
-      <div className=" ml-1 basis-1/4">
-        <p>Track Name</p>
+    <div className="mx-auto hidden w-full  items-start justify-between font-bold md:flex">
+      <div className="mx-auto flex basis-5/6 flex-row justify-between text-center ">
+        <div className=" ml-1 basis-1/3">
+          <p>Track Name</p>
+        </div>
+        <div className=" ml-1 basis-1/3 ">
+          <p>Artist Name</p>
+        </div>
+        <div className=" ml-1 basis-1/3">
+          <p>Album Name</p>
+        </div>
       </div>
-      <div className=" ml-1 basis-1/4 ">
-        <p>Artist Name</p>
-      </div>
-      <div className=" ml-1 basis-1/4">
-        <p>Album Name</p>
-      </div>
-      <div className=" ml-1 basis-1/4">
-        <p>Number of Listens</p>
+      <div className=" ml-1">
+        <p>Plays</p>
       </div>
     </div>
     <Pagination

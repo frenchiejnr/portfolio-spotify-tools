@@ -32,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({
     setCurrentPage(selectedPage.selected);
   };
   return (
-    <div className="flex h-full w-full flex-grow flex-col text-center">
+    <div className="flex  w-full flex-grow flex-col text-center">
       <div className="flex h-full flex-grow basis-11/12 flex-col">
         {subset.map((item) => {
           item.keyid = uuidv4();

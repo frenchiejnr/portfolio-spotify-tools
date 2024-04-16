@@ -11,9 +11,12 @@ export const MultipleArtists: React.FC<{
 }> = ({ item }) => {
   const [showArtists, setShowArtists] = useState(false);
   return (
-    <div className="flex" onClick={() => setShowArtists(!showArtists)}>
+    <div
+      className="flex md:basis-1/3"
+      onClick={() => setShowArtists(!showArtists)}
+    >
       {showArtists ? (
-        <div className="flex flex-col sm:basis-1/4">
+        <div className="flex flex-col ">
           {item.track_metadata.additional_info.artist_names?.map(
             (artist, i) => (
               <div className="flex" key={artist}>

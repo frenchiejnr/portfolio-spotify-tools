@@ -13,10 +13,10 @@ export const PlaylistTracks: React.FC<{
     <>
       <div
         key={item.track?.id}
-        className="mx-auto flex w-full flex-1 items-center justify-between"
+        className="mx-auto flex w-full flex-1 items-center justify-between md:flex-row"
       >
-        <div className="flex flex-grow basis-3/4 flex-col text-left sm:basis-5/6 sm:flex-row">
-          <div className="flex sm:basis-1/4">
+        <div className="flex flex-grow basis-3/4 flex-col text-left sm:basis-5/6 md:flex-row md:items-center">
+          <div className="flex md:basis-1/3">
             <SpotifyLink url={item.track?.external_urls.spotify} />
             <Link
               to={`/track/${item.track?.id}`}
@@ -29,7 +29,7 @@ export const PlaylistTracks: React.FC<{
               </div>
             </Link>
           </div>
-          <div className="flex sm:basis-1/4">
+          <div className="flex md:basis-1/3">
             <SpotifyLink url={item.track?.artists[0].external_urls.spotify} />
             <Link
               to={`/artist/${item.track?.artists[0].id}`}
@@ -38,11 +38,11 @@ export const PlaylistTracks: React.FC<{
               {" "}
               <div className="flex flex-row">
                 <ArtistIcon />
-                <p className="px-1 text-left">{item.track?.artists[0].name}</p>
+                <p className="px-1">{item.track?.artists[0].name}</p>
               </div>
             </Link>
           </div>
-          <div className="flex sm:basis-1/4">
+          <div className="flex md:basis-1/3">
             <SpotifyLink url={item.track?.album.external_urls.spotify} />
             <Link
               to={`/album/${item.track?.album.id}`}
@@ -55,14 +55,14 @@ export const PlaylistTracks: React.FC<{
             </Link>
           </div>
         </div>
-        <div className="basis-1/4 self-center sm:basis-1/6">
-          <div className="flex flex-row">
+        <div className="basis-1/4 self-center md:basis-1/12">
+          <div className="flex flex-row justify-end">
             <PlayIcon />
             <p className="pl-1">{listenCount}</p>
           </div>
         </div>
       </div>
-      <hr className="sm:hidden" />
+      <hr />
     </>
   );
 };

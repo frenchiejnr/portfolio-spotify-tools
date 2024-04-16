@@ -21,16 +21,20 @@ export const RecentListensDisplay = (props: RecentListensProps<Listen>) => {
   return (
     <>
       <div
-        className={`mt-1 w-full basis-1/12 rounded-xl ${props.bgColour ? props.bgColour : "bg-indigo-200"} flex justify-between p-2`}
+        className={`mt-1 flex w-full basis-1/12 justify-between rounded-xl p-2
+        ${props.bgColour ? props.bgColour : "bg-indigo-200"}
+        `}
       >
         <button
           onClick={() => setShowTracks((prevShowTracks) => !prevShowTracks)}
         >
           {showTracks ? <UpIcon /> : <DownIcon />}
         </button>
-        <div>
-          <h1 className="text-right text-xl font-bold">{title}</h1>
-          <p className="text-right text-lg font-semibold">
+        <div className="md:flex-grow">
+          <h1 className="text-right text-xl font-bold md:text-center">
+            {title}
+          </h1>
+          <p className="text-right text-lg font-semibold md:text-center">
             {totalLabel} - {dataLength}
           </p>
         </div>
