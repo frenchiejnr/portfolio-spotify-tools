@@ -1,50 +1,31 @@
-import { spotify } from "@/lib/spotify";
+import { addTracksToPlaylist, deleteTracksFromPlaylist } from "../utils";
 
-export const ShufflePlaylistButton = (tracks) => {
+export const ShufflePlaylistButton = ({
+  tracks,
+  playlist,
+}: {
+  tracks: SpotifyApi.PlaylistTrackObject[];
+  playlist: SpotifyApi.PlaylistObjectFull;
+}) => {
   const handleClick = async () => {
-    await deleteTracksFromPlaylist(tracks.playlist.id, tracks.tracks);
-    shuffleTracks(tracks.tracks);
-
-    await addTracksToPlaylist(tracks.playlist.id, tracks.tracks);
+    await deleteTracksFromPlaylist(playlist.id, tracks);
+    shuffleTracks(tracks);
+    await addTracksToPlaylist(playlist.id, tracks);
   };
 
-  const addTracksToPlaylist = async (playlistId, tracks) => {
-    const trackBatches = [];
-
-    for (let i = 0; i < tracks.length; i += 100) {
-      trackBatches.push(tracks.slice(i, i + 100));
-    }
-    for (const batch of trackBatches) {
-      const trackUris = batch.map((track) => track.track?.uri);
-      await spotify.post(`/playlists/${playlistId}/tracks`, {
-        uris: trackUris,
-      });
-    }
-  };
-  const deleteTracksFromPlaylist = async (playlistId, tracks) => {
-    const trackBatches = [];
-
-    for (let i = 0; i < tracks.length; i += 100) {
-      trackBatches.push(tracks.slice(i, i + 100));
-    }
-    for (const batch of trackBatches) {
-      const trackUris = batch.map((track) => ({
-        uri: track.track?.uri, // Handle potential undefined uri property
-      }));
-
-      await spotify.delete(`/playlists/${playlistId}/tracks`, {
-        data: {
-          tracks: trackUris,
-        },
-      });
-    }
-  };
-
-  const shuffleTracks = async (array: []) => {
+  const shuffleTracks = async (array: SpotifyApi.PlaylistTrackObject[]) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
     }
   };
-  return <button onClick={handleClick}>Shuffle Playlist</button>;
+
+  return (
+    <button
+      className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+      onClick={handleClick}
+    >
+      Shuffle Playlist
+    </button>
+  );
 };

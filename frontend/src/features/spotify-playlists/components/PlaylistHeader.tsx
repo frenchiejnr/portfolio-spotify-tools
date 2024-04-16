@@ -39,7 +39,7 @@ export const PlaylistHeader: PlaylistHeaderProps = ({
           )}
         </div>
       </div>
-      <div className="mt-1 w-full rounded-xl bg-indigo-100 p-2">
+      <div className="mt-1 flex w-full flex-col rounded-xl bg-indigo-100 p-2">
         <div className="flex flex-row justify-between">
           <Link
             to={"/playlists"}
@@ -57,13 +57,15 @@ export const PlaylistHeader: PlaylistHeaderProps = ({
             Unplayed only
           </label>
         </div>
-        {showUnplayedOnly && (
-          <CreateUnplayedPlaylistButton
-            playlist={playlist}
-            filteredTracks={filteredTracks}
-          />
-        )}
-        <ShufflePlaylistButton tracks={filteredTracks} playlist={playlist} />
+        <div className="flex justify-end gap-2">
+          {showUnplayedOnly && (
+            <CreateUnplayedPlaylistButton
+              playlist={playlist}
+              filteredTracks={filteredTracks}
+            />
+          )}
+          <ShufflePlaylistButton tracks={filteredTracks} playlist={playlist} />
+        </div>
       </div>
     </>
   );
