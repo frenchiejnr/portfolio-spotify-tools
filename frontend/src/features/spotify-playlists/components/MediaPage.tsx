@@ -34,9 +34,7 @@ export const MediaPage = ({
     setSortMethod(event.target.value);
   };
 
-  const handleShowTracksChange = (
-    event: React.ChangeEvent<{ value: string }>,
-  ) => {
+  const handleShowTracksChange = () => {
     setShowTracks((prevShowTracks) => !prevShowTracks);
   };
 

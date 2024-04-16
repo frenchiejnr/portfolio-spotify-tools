@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
-
-import {
-  handleGetMe,
-  handleGetRecentlyPlayed,
-} from "@/features/spotify-user-info";
 import storage from "@/utils/storage";
 import { getAccessToken } from "@/features/auth";
-import {
-  checkForListens,
-  getListOfAlbums,
-  getListOfArtists,
-  getListOfTracks,
-} from "@/features/listens/utils";
+import { checkForListens } from "@/features/listens/utils";
 import { LoginButton } from "@/features/auth/components/LoginButton";
-import { useRecentListens } from "@/features/listens/components/useRecentListens";
 import { Link } from "react-router-dom";
 import { Listen } from "@/features/listens/types";
 import { getData, setData as setDBData } from "@/utils/indexDB";
@@ -26,11 +15,6 @@ function HomePage() {
   const [isFetchingListens, setIsFetchingListens] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [validToken, setValidToken] = useState(false);
-  // const { data, dataLength } = useRecentListens(
-  //   "listens",
-  //   (a, b) => b.listened_at - a.listened_at,
-  //   refresh,
-  // );
   const [data, setData] = useState<DataItem<T>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataLength, setDataLength] = useState(0);
@@ -100,15 +84,6 @@ function HomePage() {
     console.log(`Finished Refreshing Listens`);
     setIsFetchingListens(false);
     setRefresh(false);
-  };
-
-  const handleListenBrainz = async () => {
-    let response = await getListOfArtists();
-    console.log(response);
-    response = await getListOfAlbums();
-    console.log(response);
-    response = await getListOfTracks();
-    console.log(response);
   };
 
   const handleListensWithoutId = async () => {
@@ -190,26 +165,61 @@ function HomePage() {
     <>
       {validToken ? (
         <>
-          <button disabled={isFetchingListens} onClick={getListens}>
-            Check For More Listens
-          </button>
-          <br />
-          <Link to={"/playlists"}>Playlists</Link>
-          <Link to={"/album"}>Albums</Link>
-          <Link to={"/artist"}>Artists</Link>
-          <Link to={"/track"}>Tracks</Link>
-          <button onClick={handleGetMe}>Get me</button>
-          <button type="button" onClick={handleGetRecentlyPlayed}>
-            Get recently played
-          </button>
-          <button onClick={handleListenBrainz}>Log on to listenbrainz</button>
-          <button onClick={handleListensWithoutId}>
-            Songs missing spotify Id
-          </button>
-          {isFetchingListens ? (
-            <h1>Fetching Listens - Fetched x listens</h1>
-          ) : (
-            <>
+          <div
+            className={`flex w-full flex-col justify-between bg-indigo-300 p-1 pt-0`}
+          >
+            <div className="flex justify-around">
+              <button
+                disabled={isFetchingListens}
+                onClick={getListens}
+                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+              >
+                Check For More Listens
+              </button>
+              <button
+                onClick={handleListensWithoutId}
+                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+              >
+                Songs missing spotify Id
+              </button>
+            </div>
+            <div className="flex justify-around">
+              <Link
+                to={"/"}
+                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+              >
+                Home
+              </Link>
+              <Link
+                to={"/playlists"}
+                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+              >
+                Playlists
+              </Link>
+              <Link
+                to={"/album"}
+                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+              >
+                Albums
+              </Link>
+              <Link
+                to={"/artist"}
+                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+              >
+                Artists
+              </Link>
+              <Link
+                to={"/track"}
+                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
+              >
+                Tracks
+              </Link>
+            </div>
+          </div>
+          <div className="m-auto flex h-dvh w-5/6 flex-col">
+            {isFetchingListens ? (
+              <h1>Fetching Listens - Fetched x listens</h1>
+            ) : (
               <RecentListensDisplay
                 data={data}
                 dataLength={dataLength}
@@ -217,8 +227,8 @@ function HomePage() {
                 title={"Recent Listens"}
                 totalLabel={"Listens"}
               />
-            </>
-          )}
+            )}
+          </div>
         </>
       ) : (
         <div className="flex content-center justify-center">
