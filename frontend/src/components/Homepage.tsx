@@ -3,11 +3,11 @@ import storage from "@/utils/storage";
 import { getAccessToken } from "@/features/auth";
 import { checkForListens } from "@/features/listens/utils";
 import { LoginButton } from "@/features/auth/components/LoginButton";
-import { Link } from "react-router-dom";
 import { Listen } from "@/features/listens/types";
 import { getData, setData as setDBData } from "@/utils/indexDB";
 import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
 import { ListenComponent } from "@/features/listens/components/Listen";
+import { LinkBar } from "./LinkBar";
 
 export type DataItem<T> = T;
 
@@ -165,9 +165,8 @@ function HomePage() {
     <>
       {validToken ? (
         <>
-          <div
-            className={`flex w-full flex-col justify-between bg-indigo-300 p-1 pt-0`}
-          >
+          <div className={`flex w-full flex-col justify-between bg-indigo-300`}>
+            <LinkBar />
             <div className="flex justify-around">
               <button
                 disabled={isFetchingListens}
@@ -182,38 +181,6 @@ function HomePage() {
               >
                 Songs missing spotify Id
               </button>
-            </div>
-            <div className="flex justify-around">
-              <Link
-                to={"/"}
-                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
-              >
-                Home
-              </Link>
-              <Link
-                to={"/playlists"}
-                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
-              >
-                Playlists
-              </Link>
-              <Link
-                to={"/album"}
-                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
-              >
-                Albums
-              </Link>
-              <Link
-                to={"/artist"}
-                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
-              >
-                Artists
-              </Link>
-              <Link
-                to={"/track"}
-                className="mt-1 rounded-md bg-gray-200 px-2 text-left shadow hover:bg-gray-100"
-              >
-                Tracks
-              </Link>
             </div>
           </div>
           <div className="m-auto flex h-dvh w-5/6 flex-col">
