@@ -6,6 +6,7 @@ import MediaInfo from "./MediaInfo";
 import MediaSortDropdown from "./MediaSortDropdown";
 import { RecentListensDisplay } from "@/features/listens/components/RecentListensDisplay";
 import { ListenComponent } from "@/features/listens/components/Listen";
+import { LinkBar } from "@/components/LinkBar";
 
 export const MediaPage = ({
   mediaId,
@@ -39,29 +40,32 @@ export const MediaPage = ({
   };
 
   return (
-    <div className="m-auto flex h-dvh w-5/6 flex-col">
-      <MediaInfo
-        id={mediaId!}
-        mediaType={mediaType}
-        handleShowTracksChange={handleShowTracksChange}
-        showTracks={showTracks}
-      />
-      {showTracks && (
-        <MediaSortDropdown
-          sortMethod={sortMethod}
-          handleSortChange={handleSortChange}
+    <>
+      <LinkBar />
+      <div className="m-auto flex h-dvh w-5/6 flex-col">
+        <MediaInfo
+          id={mediaId!}
+          mediaType={mediaType}
+          handleShowTracksChange={handleShowTracksChange}
+          showTracks={showTracks}
         />
-      )}
-      {showTracks && renderTracks({ sortMethod, songCounts, mediaId })}
-      <hr />
-      <RecentListensDisplay
-        data={songPlays}
-        dataLength={songPlays.length}
-        ItemComponent={ListenComponent}
-        title={"Recent Listens"}
-        totalLabel={"Listens"}
-      />
-    </div>
+        {showTracks && (
+          <MediaSortDropdown
+            sortMethod={sortMethod}
+            handleSortChange={handleSortChange}
+          />
+        )}
+        {showTracks && renderTracks({ sortMethod, songCounts, mediaId })}
+        <hr />
+        <RecentListensDisplay
+          data={songPlays}
+          dataLength={songPlays.length}
+          ItemComponent={ListenComponent}
+          title={"Recent Listens"}
+          totalLabel={"Listens"}
+        />
+      </div>
+    </>
   );
 };
 
