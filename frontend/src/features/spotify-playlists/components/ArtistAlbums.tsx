@@ -4,57 +4,46 @@ import { spotify } from "@/lib/spotify";
 import { CountComponent } from "@/features/listens/components/CountComponent";
 import { MediaItemWithCount } from "@/features/listens/types";
 
-const ArtistTracks = ({
+const ArtistAlbums = ({
   sortMethod,
-  songCounts,
+  albumCounts,
   artistId,
 }: {
   sortMethod: string;
-  songCounts: MediaItemWithCount[];
+  albumCounts: MediaItemWithCount[];
   artistId: string;
 }) => {
-  const [artistTracks, setArtistTracks] = useState<
-    SpotifyApi.TrackObjectSimplified[]
+  const [artistAlbums, setArtistAlbums] = useState<
+    SpotifyApi.AlbumObjectSimplified[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const getAllArtistTracks = async () => {
+    const getAllArtistAlbums = async () => {
       setIsLoading(true);
-      const artistAlbums: SpotifyApi.ArtistsAlbumsResponse = await spotify.get(
-        `artists/${artistId}/albums?limit=50`,
-      );
-      const allTracks: SpotifyApi.TrackObjectSimplified[] = [];
+      const artistAlbumsResponse: SpotifyApi.ArtistsAlbumsResponse =
+        await spotify.get(`artists/${artistId}/albums?limit=50`);
 
-      for (const album of artistAlbums.items) {
-        const albumTracks: SpotifyApi.AlbumTracksResponse = await spotify.get(
-          `/albums/${album.id}/tracks`,
-        );
-        albumTracks.items.forEach((track) => {
-          track.release_date = album.release_date; // Add a new property
-        });
-        allTracks.push(...albumTracks.items);
-      }
+      setArtistAlbums(artistAlbumsResponse.items);
 
-      setArtistTracks(allTracks);
       setIsLoading(false);
     };
-    getAllArtistTracks();
+    getAllArtistAlbums();
   }, []);
 
-  const sortTracks = (data: SpotifyApi.TrackObjectFull[]) => {
+  const sortAlbums = (data: SpotifyApi.AlbumObjectSimplified[]) => {
     switch (sortMethod) {
       case "by-count":
-        return data.sort((trackA, trackB) => {
+        return data.sort((albumA, albumB) => {
           const countA =
-            songCounts.find(
+            albumCounts.find(
               (count: { id: string }) =>
-                count.id === trackA.external_urls.spotify,
+                count.id === albumA.external_urls.spotify,
             )?.count || 0;
           const countB =
-            songCounts.find(
+            albumCounts.find(
               (count: { id: string }) =>
-                count.id === trackB.external_urls.spotify,
+                count.id === albumB.external_urls.spotify,
             )?.count || 0;
           return countB - countA; // Sort in descending order
         });
@@ -63,8 +52,8 @@ const ArtistTracks = ({
           return trackA.name.localeCompare(trackB.name);
         });
       case "by-release-date":
-        return data.sort((a, b) => {
-          return new Date(b.release_date) - new Date(a.release_date);
+        return data.sort((albumA, albumB) => {
+          return new Date(albumB.release_date) - new Date(albumA.release_date);
         });
       default:
         return data;
@@ -79,25 +68,26 @@ const ArtistTracks = ({
         <>
           <div className="mt-1 flex w-full basis-1/12 flex-col justify-between rounded-xl bg-indigo-100 p-2 text-right">
             <div className="flex-grow">
-              <p className="text-xl font-bold md:text-center">Tracks</p>
+              <p className="text-xl font-bold md:text-center">Albums</p>
             </div>
+
             <div className="text-right text-sm">
               <p>
-                {songCounts.length} of {artistTracks.length} Tracks
+                {albumCounts.length} of {artistAlbums.length} Albums
               </p>
               <p>
-                {((songCounts.length / artistTracks.length) * 100).toFixed(2)}%
+                {((albumCounts.length / artistAlbums.length) * 100).toFixed(2)}%
                 Played
               </p>
             </div>
           </div>
           <div>
             <Pagination
-              totalCount={artistTracks.length}
+              totalCount={artistAlbums.length}
               pageSize={10}
-              data={sortTracks(artistTracks)} // Pass sorted data to Pagination
+              data={sortAlbums(artistAlbums)} // Pass sorted data to Pagination
               ItemComponent={CountComponent}
-              songCounts={songCounts}
+              songCounts={albumCounts}
             />
           </div>
         </>
@@ -106,4 +96,4 @@ const ArtistTracks = ({
   );
 };
 
-export default ArtistTracks;
+export default ArtistAlbums;

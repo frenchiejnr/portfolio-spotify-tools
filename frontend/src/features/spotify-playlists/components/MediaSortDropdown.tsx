@@ -13,7 +13,7 @@ const MediaSortDropdown = ({
     >
       <option value="by-count">Sort by Play Count</option>
       <option value="by-name">Sort by Name</option>
-      <option value="by-track-number">Sort by Track Number</option>
+      <option value="by-release-date">Sort by Release Date</option>
     </select>
   </div>
 );
