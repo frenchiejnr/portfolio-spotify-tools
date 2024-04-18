@@ -3,6 +3,7 @@ import Pagination from "@/components/Pagination";
 import { spotify } from "@/lib/spotify";
 import { CountComponent } from "@/features/listens/components/CountComponent";
 import { MediaItemWithCount } from "@/features/listens/types";
+import { log } from "console";
 
 const ArtistAlbums = ({
   sortMethod,
@@ -17,19 +18,48 @@ const ArtistAlbums = ({
     SpotifyApi.AlbumObjectSimplified[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [nextPageUrl, setNextPageUrl] = useState<string | null>();
 
   useEffect(() => {
-    const getAllArtistAlbums = async () => {
+    const fetchArtistContent = async (includeGroup) => {
       setIsLoading(true);
-      const artistAlbumsResponse: SpotifyApi.ArtistsAlbumsResponse =
-        await spotify.get(`artists/${artistId}/albums?limit=50`);
 
-      setArtistAlbums(artistAlbumsResponse.items);
+      try {
+        const artistContentResponse: SpotifyApi.ArtistsItemsResponse =
+          await spotify.get(
+            `artists/${artistId}/albums?limit=50&include_groups=${includeGroup}`,
+          );
 
-      setIsLoading(false);
+        setArtistAlbums((prevAlbums) => [
+          ...prevAlbums,
+          ...artistContentResponse.items,
+        ]);
+
+        setNextPageUrl(artistContentResponse.next);
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
+      }
     };
-    getAllArtistAlbums();
-  }, []);
+
+    const fetchAllContent = async () => {
+      const includeGroups = ["album", "single", "appears_on", "compilation"];
+
+      for (const includeGroup of includeGroups) {
+        await fetchArtistContent(includeGroup);
+
+        // Fetch more for the current includeGroup if nextPageUrl exists
+        while (nextPageUrl) {
+          const newAlbums = await spotify.get(nextPageUrl.split("/v1/")[1]);
+          setArtistAlbums((prevAlbums) => [...prevAlbums, ...newAlbums.items]);
+          setNextPageUrl(newAlbums.next);
+        }
+      }
+    };
+
+    setArtistAlbums([]);
+    fetchAllContent();
+  }, [artistId]);
 
   const sortAlbums = (data: SpotifyApi.AlbumObjectSimplified[]) => {
     switch (sortMethod) {

@@ -21,26 +21,55 @@ const ArtistTracks = ({
   useEffect(() => {
     const getAllArtistTracks = async () => {
       setIsLoading(true);
-      const artistAlbums: SpotifyApi.ArtistsAlbumsResponse = await spotify.get(
-        `artists/${artistId}/albums?limit=50`,
-      );
       const allTracks: SpotifyApi.TrackObjectSimplified[] = [];
+      const artistAlbums: SpotifyApi.AlbumObjectSimplified[] = [];
 
-      for (const album of artistAlbums.items) {
+      const includeGroups = ["album", "single", "appears_on", "compilation"];
+
+      for (let i = 0; i < includeGroups.length; i++) {
+        const includeGroup = includeGroups[i];
+
+        // Fetch content for the current includeGroup
+        const artistContentResponse: SpotifyApi.ArtistsAlbumsResponse =
+          await spotify.get(
+            `artists/${artistId}/albums?limit=50&include_groups=${includeGroup}`,
+          );
+
+        artistAlbums.push(...artistContentResponse.items);
+
+        // Handle pagination (if applicable)
+        while (artistContentResponse.next) {
+          const newAlbums = await spotify.get(
+            artistContentResponse.next.split("/v1/")[1],
+          );
+          artistAlbums.push(...newAlbums.items);
+          artistContentResponse.next = newAlbums.next;
+        }
+      }
+
+      // Fetch tracks for all albums (assuming artistAlbums is populated)
+      for (const album of artistAlbums) {
         const albumTracks: SpotifyApi.AlbumTracksResponse = await spotify.get(
           `/albums/${album.id}/tracks`,
         );
+
+        albumTracks.items = albumTracks.items.filter((track) =>
+          track.artists.some((artist) => artist.id === artistId),
+        );
+
         albumTracks.items.forEach((track) => {
           track.release_date = album.release_date; // Add a new property
         });
+
         allTracks.push(...albumTracks.items);
       }
 
       setArtistTracks(allTracks);
       setIsLoading(false);
     };
+
     getAllArtistTracks();
-  }, []);
+  }, [artistId]);
 
   const sortTracks = (data: SpotifyApi.TrackObjectFull[]) => {
     switch (sortMethod) {
