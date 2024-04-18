@@ -71,7 +71,9 @@ export const MediaPage = ({
         )}
         {showTracks && renderTracks({ sortMethod, songCounts, mediaId })}
         <hr />
-        {renderAlbums && renderAlbums({ sortMethod, albumCounts, mediaId })}
+        {showTracks &&
+          renderAlbums &&
+          renderAlbums({ sortMethod, albumCounts, mediaId })}
         <RecentListensDisplay
           data={songPlays}
           dataLength={songPlays.length}

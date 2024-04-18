@@ -3,7 +3,6 @@ import Pagination from "@/components/Pagination";
 import { spotify } from "@/lib/spotify";
 import { CountComponent } from "@/features/listens/components/CountComponent";
 import { MediaItemWithCount } from "@/features/listens/types";
-import { log } from "console";
 
 const ArtistAlbums = ({
   sortMethod,
@@ -18,6 +17,7 @@ const ArtistAlbums = ({
     SpotifyApi.AlbumObjectSimplified[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [albumGroups, setAlbumGroups] = useState("all");
   const [nextPageUrl, setNextPageUrl] = useState<string | null>();
 
   useEffect(() => {
@@ -61,6 +61,30 @@ const ArtistAlbums = ({
     fetchAllContent();
   }, [artistId]);
 
+  const handleGroupChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setAlbumGroups(event.target.value);
+  };
+
+  const GroupDropdown = ({
+    albumGroups,
+    handleGroupChange,
+  }: {
+    albumGroups: string;
+    handleGroupChange: (event: any) => void;
+  }) => (
+    <div className="text-center">
+      <select
+        value={albumGroups}
+        onChange={handleGroupChange}
+        className="text-base"
+      >
+        <option value="all">All</option>
+        <option value="albums">Albums</option>
+        <option value="non-albums">Non Albums</option>
+      </select>
+    </div>
+  );
+
   const sortAlbums = (data: SpotifyApi.AlbumObjectSimplified[]) => {
     switch (sortMethod) {
       case "by-count":
@@ -89,6 +113,20 @@ const ArtistAlbums = ({
         return data;
     }
   };
+  const sortGroups = (data: SpotifyApi.AlbumObjectSimplified[]) => {
+    switch (albumGroups) {
+      case "all":
+        return data;
+      case "albums":
+        return data.filter((album) => album.album_type === "album");
+      case "non-albums":
+        return data.filter((album) => album.album_type !== "album");
+      default:
+        return data;
+    }
+  };
+
+  const data = sortGroups(sortAlbums(artistAlbums));
 
   return (
     <>
@@ -105,6 +143,7 @@ const ArtistAlbums = ({
               <p>
                 {albumCounts.length} of {artistAlbums.length} Albums
               </p>
+              {albumGroups !== "all" && <p>{data.length} Showing</p>}
               <p>
                 {((albumCounts.length / artistAlbums.length) * 100).toFixed(2)}%
                 Played
@@ -112,10 +151,14 @@ const ArtistAlbums = ({
             </div>
           </div>
           <div>
+            <GroupDropdown
+              albumGroups={albumGroups}
+              handleGroupChange={handleGroupChange}
+            />
             <Pagination
-              totalCount={artistAlbums.length}
+              totalCount={data.length}
               pageSize={10}
-              data={sortAlbums(artistAlbums)} // Pass sorted data to Pagination
+              data={data} // Pass sorted data to Pagination
               ItemComponent={CountComponent}
               songCounts={albumCounts}
             />
