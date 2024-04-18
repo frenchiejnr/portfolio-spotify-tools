@@ -47,6 +47,7 @@ const AlbumTracks = ({
 
     fetchMore();
   }, [nextPageUrl, isLoading]);
+
   const sortTracks = (data: SpotifyApi.TrackObjectSimplified[]) => {
     switch (sortMethod) {
       case "by-count":

@@ -12,14 +12,17 @@ export const MediaPage = ({
   mediaId,
   mediaType,
   renderTracks,
+  renderAlbums = null,
 }: {
   mediaId: string;
   mediaType: "track" | "artist" | "album";
   renderTracks: any;
+  renderAlbums?: any;
 }) => {
   const songPlays = useMediaPlays(mediaId!, mediaType);
   const [sortMethod, setSortMethod] = useState("by-count");
   const [showTracks, setShowTracks] = useState(true);
+  const [albumCounts, setAlbumCounts] = useState<MediaItemWithCount[]>([]);
   const [songCounts, setSongCounts] = useState<MediaItemWithCount[]>([]);
 
   useEffect(() => {
@@ -29,6 +32,17 @@ export const MediaPage = ({
     };
 
     getSongCounts();
+  }, [songPlays]);
+
+  useEffect(() => {
+    const getAlbumCount = async () => {
+      if (renderAlbums) {
+        const counts = await countItems(songPlays, "release_name");
+        setAlbumCounts(counts);
+      }
+    };
+
+    getAlbumCount();
   }, [songPlays]);
 
   const handleSortChange = (event: React.ChangeEvent<{ value: string }>) => {
@@ -57,6 +71,9 @@ export const MediaPage = ({
         )}
         {showTracks && renderTracks({ sortMethod, songCounts, mediaId })}
         <hr />
+        {showTracks &&
+          renderAlbums &&
+          renderAlbums({ sortMethod, albumCounts, mediaId })}
         <RecentListensDisplay
           data={songPlays}
           dataLength={songPlays.length}
